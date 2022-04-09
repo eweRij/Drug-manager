@@ -1,18 +1,12 @@
 import { useFormik } from "formik";
-
-type UserDataSignUp = {
-  first_name: string;
-  last_name: string;
-  login: string;
-  password: string;
-  confirmation: string;
-};
+import { UserDataSignUp } from "../types/user";
 
 export const validate = (values: UserDataSignUp) => {
   const errors: UserDataSignUp = {
     first_name: "",
     last_name: "",
     login: "",
+    email: "",
     password: "",
     confirmation: "",
   };

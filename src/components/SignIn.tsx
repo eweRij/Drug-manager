@@ -1,10 +1,13 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { Container, TextField } from "@mui/material";
 import Auth from "./Auth";
-import { validate } from "./utils/signIn_validation";
+import { validate } from "../utils/signIn_validation";
 import { useFormik } from "formik";
+import { userLogin } from "../utils/api";
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       login: "",
@@ -16,6 +19,15 @@ const SignIn = () => {
     },
   });
 
+  const handleSignIn = (e: SyntheticEvent) => {
+    e.preventDefault();
+    formik.handleSubmit();
+    userLogin(formik.values).then((data) => {
+      console.log(data);
+      navigate("/home");
+    });
+  };
+  console.log(formik.values);
   return (
     <Container maxWidth="sm" sx={{ marginTop: "25vh" }}>
       <Auth
@@ -23,7 +35,7 @@ const SignIn = () => {
         button_title="SIGN IN"
         further_action="If you are not register"
         route="/register"
-        onSubmit={formik.handleSubmit}
+        onSubmit={handleSignIn}
       >
         <TextField
           margin="normal"

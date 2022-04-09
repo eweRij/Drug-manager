@@ -1,13 +1,26 @@
+import { ReactEventHandler, SyntheticEvent, useState } from "react";
 import Auth from "./Auth";
 import { Container, TextField } from "@mui/material";
-import { validate } from "./utils/signUp_validation";
+import { validate } from "../utils/signUp_validation";
 import { useFormik } from "formik";
+import { UserDataSignIn, UserDataSignUp } from "../types/user";
+import { userRegister } from "../utils/api";
 
 const SignUp = () => {
+  const [user, setUser] = useState<UserDataSignUp>({
+    first_name: "",
+    last_name: "",
+    login: "",
+    email: "",
+    password: "",
+    confirmation: "",
+  });
+
   const formik = useFormik({
     initialValues: {
       first_name: "",
       last_name: "",
+      email: "",
       login: "",
       password: "",
       confirmation: "",
@@ -17,6 +30,14 @@ const SignUp = () => {
       alert(JSON.stringify(values, null, 2));
     },
   });
+
+  const handleSignUp = (e: SyntheticEvent) => {
+    e.preventDefault();
+    formik.handleSubmit();
+    userRegister(formik.values)
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+  };
   return (
     <Container maxWidth="sm" sx={{ marginTop: "10vh" }}>
       <Auth
@@ -24,7 +45,7 @@ const SignUp = () => {
         button_title="SIGN UP"
         further_action="If you are already registered"
         route="/"
-        onSubmit={formik.handleSubmit}
+        onSubmit={handleSignUp}
       >
         <TextField
           margin="normal"
@@ -61,6 +82,18 @@ const SignUp = () => {
           value={formik.values.login}
           helperText={formik.touched.login && formik.errors.login}
           error={formik.touched.login && Boolean(formik.errors.login)}
+        />
+        <TextField
+          margin="normal"
+          color="secondary"
+          id="email"
+          label="Email"
+          fullWidth
+          type="email"
+          onChange={formik.handleChange}
+          value={formik.values.email}
+          error={formik.touched.email && Boolean(formik.errors.email)}
+          helperText={formik.touched.email && formik.errors.email}
         />
         <TextField
           margin="normal"
