@@ -5,6 +5,7 @@ import Auth from "./Auth";
 import { validate } from "../utils/signIn_validation";
 import { useFormik } from "formik";
 import { userLogin } from "../utils/api";
+import { getUser } from "../utils/auth";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -24,7 +25,8 @@ const SignIn = () => {
     formik.handleSubmit();
     userLogin(formik.values).then((data) => {
       console.log(data);
-      navigate("/home");
+      console.log(getUser());
+      // navigate("/home");
     });
   };
   console.log(formik.values);

@@ -4,12 +4,12 @@
 
 // export const removeToken = () => localStorage.removeItem("token");
 
-// export const setUser = (user) =>
-//   localStorage.setItem("user", JSON.stringify(user));
+export const setUser = (user) =>
+  localStorage.setItem("user", JSON.stringify(user._id));
 
 // export const removeUser = () => localStorage.removeItem("user");
 
-// export const getUser = () => JSON.parse(localStorage.getItem("user"));
+export const getUser = () => JSON.parse(localStorage.getItem("user"));
 
 // export const clearToken = () => {
 //   setTimeout(removeToken, 60000);

@@ -8,8 +8,8 @@ import Layout from "./components/Layout";
 const App: React.FC = () => {
   return (
     <div className="authlayout-container">
-      {/* <AuthLayout /> */}
-      <Layout />
+      <AuthLayout />
+      {/* <Layout /> */}
     </div>
   );
 };

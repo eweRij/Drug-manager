@@ -1,4 +1,5 @@
 import axios from "./axios";
+import { setUser } from "./auth";
 
 export const userRegister = async (user) => {
   await axios
@@ -11,6 +12,7 @@ export const userLogin = (user) => {
     axios
       .post(`user/login`, user)
       .then((resp) => {
+        setUser(resp.data);
         resolve(resp);
       })
       .catch((err) => {
@@ -19,18 +21,18 @@ export const userLogin = (user) => {
   });
 };
 
-// export const getUser = (id) => {
-//   return new Promise((resolve, reject) => {
-//     axios
-//       .get(`user/getUser`, id)
-//       .then((resp) => {
-//         resolve(resp);
-//       })
-//       .catch((err) => {
-//         reject(err);
-//       });
-//   });
-// };
+export const getUser = (id) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`user/getUser`, id)
+      .then((resp) => {
+        resolve(resp);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
 
 // export const addTaskDB = (id, task) => {
 //   return new Promise((resolve, reject) => {
