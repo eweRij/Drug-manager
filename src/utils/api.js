@@ -12,7 +12,7 @@ export const userLogin = (user) => {
     axios
       .post(`user/login`, user)
       .then((resp) => {
-        setUser(resp.data);
+        setUser(resp.data);//user!
         resolve(resp);
       })
       .catch((err) => {

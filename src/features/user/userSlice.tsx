@@ -1,49 +1,62 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+import { RootState } from "../../store/store";
 // import { getToken } from "../../utils/auth";
-// import { getUser } from "../../utils/api";
+import { getUser } from "../../utils/api";
 
-// export const fetchUser = createAsyncThunk(
-//   "user/setUserData",
-//   async (id) =>
-//     await getUser(id)
-//       .then((resp) => resp.data)
-//       .catch((err) => err)
-// );
+interface UserData {
+  first_name: string;
+  last_name: string;
+  email: string;
+  drugs?: Array<string>;
+  avatar?: string;
+}
+interface AppState {
+  isLogged: boolean;
+  userData: UserData;
+}
+export const fetchUser = createAsyncThunk(
+  "user/setUserData",
+  async (id) =>
+    await getUser(id)
+      .then((resp) => resp.data)
+      .catch((err) => err)
+);
 
-const initialState = {
-  //   isLogged: getToken(),
-  userData: { _id: "", first_name: "", last_name: "", email: "" },
+const initialState: AppState = {
+  isLogged: false, // user._id z local storage
+  userData: { first_name: "", last_name: "", email: "", drugs: [] },
 };
 
-// export const userSlice = createSlice({
-//   name: "user",
-//   initialState,
-//   reducers: {
-//     setLogged: (state) => {
-//       return { ...state, isLogged: getToken() };
-//     },
-//   },
-//   extraReducers: {
-//     [fetchUser.fulfilled.type]: (state, action) => {
-//       return {
-//         ...state,
-//         userData: {
-//           _id: action.payload._id,
-//           first_name: action.payload.first_name,
-//           last_name: action.payload.last_name,
-//           email: action.payload.email,
-//           tasks: action.payload.tasks,
-//           avatar: action.payload.avatar,
-//         },
-//       };
-//     },
-//   },
-// });
+export const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    setLogged: (state: AppState) => {
+      console.log(state);
+      // console.log(action.payload);
+      return { ...state, isLogged: true };
+    },
+  },
+  extraReducers: {
+    [fetchUser.fulfilled.type]: (state, action) => {
+      return {
+        ...state,
+        userData: {
+          first_name: action.payload.first_name,
+          last_name: action.payload.last_name,
+          email: action.payload.email,
+          drugs: action.payload.drugs,
+          avatar: action.payload.avatar,
+        },
+      };
+    },
+  },
+});
 
-// export const { setLogged } = userSlice.actions;
+export const { setLogged } = userSlice.actions;
 
-// export const selectUserLogged = (state) => state.user.isLogged;
-// export const selectUserData = (state) => state.user.userData;
+export const selectUserLogged = (state: RootState) => state.user.isLogged;
+export const selectUserData = (state: RootState) => state.user.userData;
 
-// export default userSlice.reducer;
+export default userSlice.reducer;

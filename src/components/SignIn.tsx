@@ -1,13 +1,21 @@
 import React, { SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, TextField } from "@mui/material";
+import { Dispatch } from "react";
+import { useDispatch } from "react-redux";
 import Auth from "./Auth";
 import { validate } from "../utils/signIn_validation";
 import { useFormik } from "formik";
 import { userLogin } from "../utils/api";
 import { getUser } from "../utils/auth";
+import selectUserLogged, { setLogged } from "../features/user/userSlice";
+import { useAppSelector } from "../utils/hooks";
+
+// import { useAppDispatch } from "../utils/hooks";
 
 const SignIn = () => {
+  const dispatch: Dispatch<any> = useDispatch();
+
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -26,9 +34,12 @@ const SignIn = () => {
     userLogin(formik.values).then((data) => {
       console.log(data);
       console.log(getUser());
-      // navigate("/home");
+      dispatch(setLogged());
+      navigate("/home");
     });
   };
+  const isLogged: boolean = useAppSelector((state) => state.user.isLogged);
+  console.log(isLogged);
   console.log(formik.values);
   return (
     <Container maxWidth="sm" sx={{ marginTop: "25vh" }}>
