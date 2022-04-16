@@ -2,12 +2,12 @@ import React from "react";
 
 import { Card, CardContent, CardHeader, Box, Container } from "@mui/material";
 
-const Main = () => {
+const DrugManager = () => {
   return (
     <Container sx={{ maxWidth: "70%", marginTop: "15vh" }}>
       <Card>
         <CardHeader
-          title={"Welcome!"}
+          title={"Your Profile"}
           sx={{ textAlign: "center" }}
         ></CardHeader>
         <CardContent>
@@ -17,7 +17,7 @@ const Main = () => {
               display: "block",
             }}
           >
-            This is your list of medication
+            This is your drug manager
           </Box>
         </CardContent>
       </Card>
@@ -25,4 +25,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default DrugManager;

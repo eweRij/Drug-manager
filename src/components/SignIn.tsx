@@ -7,7 +7,7 @@ import Auth from "./Auth";
 import { validate } from "../utils/signIn_validation";
 import { useFormik } from "formik";
 import { userLogin } from "../utils/api";
-import { getUser } from "../utils/auth";
+import { getUserId, getToken } from "../utils/auth";
 import selectUserLogged, { setLogged } from "../features/user/userSlice";
 import { useAppSelector } from "../utils/hooks";
 
@@ -33,12 +33,14 @@ const SignIn = () => {
     formik.handleSubmit();
     userLogin(formik.values).then((data) => {
       console.log(data);
-      console.log(getUser());
+      console.log(getUserId());
       dispatch(setLogged());
-      navigate("/home");
+      navigate("/");
     });
   };
-  const isLogged: boolean = useAppSelector((state) => state.user.isLogged);
+  const isLogged: string | null = useAppSelector(
+    (state) => state.user.isLogged
+  );
   console.log(isLogged);
   console.log(formik.values);
   return (

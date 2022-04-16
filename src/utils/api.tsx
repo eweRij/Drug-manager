@@ -1,18 +1,23 @@
-import axios from "./axios";
-import { setUser } from "./auth";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 
-export const userRegister = async (user) => {
+import axios from "./axios";
+import { setToken, setUserId } from "./auth";
+import { UserDataSignUp, UserDataSignIn } from "../types/user";
+
+export const userRegister = async (user: UserDataSignUp): Promise<void> => {
   await axios
     .post(`user/register`, user)
-    .then((data) => console.log(data).catch((err) => console.log(err)));
+    .then((data) => console.log(data))
+    .catch((err) => console.log(err));
 };
 
-export const userLogin = (user) => {
+export const userLogin = (user: UserDataSignIn) => {
   return new Promise((resolve, reject) => {
     axios
       .post(`user/login`, user)
       .then((resp) => {
-        setUser(resp.data);//user!
+        setUserId(resp.data); //token!!
+        // setToken(resp.data.token);
         resolve(resp);
       })
       .catch((err) => {
@@ -21,7 +26,7 @@ export const userLogin = (user) => {
   });
 };
 
-export const getUser = (id) => {
+export const getUser = (id: AxiosRequestConfig): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
     axios
       .get(`user/getUser`, id)
@@ -105,7 +110,7 @@ export const getUser = (id) => {
 //   });
 // };
 
-export const verifyUser = (confirmationCode) => {
+export const verifyUser = (confirmationCode: string | undefined) => {
   return new Promise((resolve, reject) => {
     axios
       .patch(`user/confirm/${confirmationCode}`)

@@ -8,9 +8,13 @@ import Layout from "./components/Layout";
 import { useSelector, useDispatch } from "react-redux";
 import { Dispatch } from "redux";
 import selectUserLogged, { setLogged } from "./features/user/userSlice";
+import { removeUserId } from "./utils/auth";
+import { useNavigate } from "react-router-dom";
 
 const App: React.FC = () => {
-  const isLogged: boolean = useAppSelector((state) => state.user.isLogged);
+  const isLogged: string | null = useAppSelector(
+    (state) => state.user.isLogged
+  );
   console.log(isLogged);
   const dispatch: Dispatch<any> = useDispatch();
   useEffect(() => {

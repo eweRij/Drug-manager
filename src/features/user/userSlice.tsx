@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { RootState } from "../../store/store";
-// import { getToken } from "../../utils/auth";
+import { getUserId } from "../../utils/auth";
 import { getUser } from "../../utils/api";
 
 interface UserData {
@@ -12,19 +12,19 @@ interface UserData {
   avatar?: string;
 }
 interface AppState {
-  isLogged: boolean;
+  isLogged: string | null;
   userData: UserData;
 }
 export const fetchUser = createAsyncThunk(
   "user/setUserData",
-  async (id) =>
+  async (id: AxiosRequestConfig) =>
     await getUser(id)
       .then((resp) => resp.data)
       .catch((err) => err)
 );
 
 const initialState: AppState = {
-  isLogged: false, // user._id z local storage
+  isLogged: getUserId(), // user._id z local storage
   userData: { first_name: "", last_name: "", email: "", drugs: [] },
 };
 
@@ -33,9 +33,8 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setLogged: (state: AppState) => {
-      console.log(state);
-      // console.log(action.payload);
-      return { ...state, isLogged: true };
+      console.log(getUserId());
+      return { ...state, isLogged: getUserId() };
     },
   },
   extraReducers: {

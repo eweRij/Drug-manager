@@ -11,11 +11,20 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import { removeUserId } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
 
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const pages = [
+  { name: "Profile", link: "/profile" },
+  { name: "Drug Manager", link: "/drugmanager" },
+];
+const settings = [
+  { name: "Profile", link: "/profile" },
+  { name: "Logout", link: "/logout" },
+];
 
 const ResponsiveAppBar = () => {
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -36,6 +45,12 @@ const ResponsiveAppBar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogOut = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    removeUserId();
+    navigate("/");
   };
 
   return (
@@ -80,8 +95,11 @@ const ResponsiveAppBar = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem
+                  key={page.link + page.name}
+                  onClick={handleCloseNavMenu}
+                >
+                  <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -97,11 +115,12 @@ const ResponsiveAppBar = () => {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name + page.link}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block" }}
+                href={page.link}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
@@ -129,8 +148,28 @@ const ResponsiveAppBar = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem
+                  key={setting.link + setting.name}
+                  onClick={handleCloseUserMenu}
+                >
+                  {setting.name === "Logout" ? (
+                    <Typography onClick={handleLogOut} textAlign="center">
+                      {setting.name}
+                    </Typography>
+                  ) : (
+                    <Typography
+                      sx={{
+                        textDecoration: "none",
+                        underline: "none",
+                        color: "inherit",
+                      }}
+                      href={setting.link}
+                      component="a"
+                      textAlign="center"
+                    >
+                      {setting.name}
+                    </Typography>
+                  )}
                 </MenuItem>
               ))}
             </Menu>

@@ -3,19 +3,10 @@ import Auth from "./Auth";
 import { Container, TextField } from "@mui/material";
 import { validate } from "../utils/signUp_validation";
 import { useFormik } from "formik";
-import { UserDataSignIn, UserDataSignUp } from "../types/user";
+import { UserDataSignUp } from "../types/user";
 import { userRegister } from "../utils/api";
 
 const SignUp = () => {
-  const [user, setUser] = useState<UserDataSignUp>({
-    first_name: "",
-    last_name: "",
-    login: "",
-    email: "",
-    password: "",
-    confirmation: "",
-  });
-
   const formik = useFormik({
     initialValues: {
       first_name: "",
