@@ -1,31 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { AxiosRequestConfig, AxiosResponse } from "axios";
-import { RootState } from "../../store/store";
+
 import { getUserId } from "../../utils/auth";
 import { getUser } from "../../utils/api";
+import { UserData } from "../../types/user";
 
-interface UserData {
-  first_name: string;
-  last_name: string;
-  email: string;
-  drugs?: Array<string>;
-  avatar?: string;
-}
 interface AppState {
-  isLogged: string | null;
+  isLogged: boolean;
   userData: UserData;
 }
 export const fetchUser = createAsyncThunk(
   "user/setUserData",
-  async (id: AxiosRequestConfig) =>
+  async (id: string) =>
     await getUser(id)
       .then((resp) => resp.data)
       .catch((err) => err)
 );
 
 const initialState: AppState = {
-  isLogged: getUserId(), // user._id z local storage
-  userData: { first_name: "", last_name: "", email: "", drugs: [] },
+  isLogged: false,
+  userData: { _id: "", first_name: "", last_name: "", email: "", drugs: [] },
 };
 
 export const userSlice = createSlice({
@@ -34,7 +27,7 @@ export const userSlice = createSlice({
   reducers: {
     setLogged: (state: AppState) => {
       console.log(getUserId());
-      return { ...state, isLogged: getUserId() };
+      return { ...state, isLogged: getUserId() ? true : false };
     },
   },
   extraReducers: {
@@ -42,6 +35,7 @@ export const userSlice = createSlice({
       return {
         ...state,
         userData: {
+          _id: action.payload._id,
           first_name: action.payload.first_name,
           last_name: action.payload.last_name,
           email: action.payload.email,
@@ -55,7 +49,7 @@ export const userSlice = createSlice({
 
 export const { setLogged } = userSlice.actions;
 
-export const selectUserLogged = (state: RootState) => state.user.isLogged;
-export const selectUserData = (state: RootState) => state.user.userData;
+// export const selectUserLogged = (state: RootState) => state.user.isLogged;
+// export const selectUserData = (state: RootState) => state.user.userData;
 
 export default userSlice.reducer;

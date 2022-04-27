@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,7 +13,6 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { removeUserId } from "../utils/auth";
-import { useNavigate } from "react-router-dom";
 
 const pages = [
   { name: "Profile", link: "/profile" },
@@ -20,11 +20,10 @@ const pages = [
 ];
 const settings = [
   { name: "Profile", link: "/profile" },
-  { name: "Logout", link: "/logout" },
+  { name: "Logout", link: "/register" },
 ];
 
-const ResponsiveAppBar = () => {
-  const navigate = useNavigate();
+const ResponsiveAppBar: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -48,9 +47,7 @@ const ResponsiveAppBar = () => {
   };
 
   const handleLogOut = (e: React.SyntheticEvent) => {
-    e.preventDefault();
     removeUserId();
-    navigate("/");
   };
 
   return (
@@ -128,7 +125,7 @@ const ResponsiveAppBar = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="user avatar" src="" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -153,7 +150,12 @@ const ResponsiveAppBar = () => {
                   onClick={handleCloseUserMenu}
                 >
                   {setting.name === "Logout" ? (
-                    <Typography onClick={handleLogOut} textAlign="center">
+                    <Typography
+                      component="a"
+                      onClick={handleLogOut}
+                      href={setting.link}
+                      textAlign="center"
+                    >
                       {setting.name}
                     </Typography>
                   ) : (

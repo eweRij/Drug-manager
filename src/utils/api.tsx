@@ -3,6 +3,7 @@ import { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "./axios";
 import { setToken, setUserId } from "./auth";
 import { UserDataSignUp, UserDataSignIn } from "../types/user";
+import { Drug } from "../types/drug";
 
 export const userRegister = async (user: UserDataSignUp): Promise<void> => {
   await axios
@@ -16,8 +17,7 @@ export const userLogin = (user: UserDataSignIn) => {
     axios
       .post(`user/login`, user)
       .then((resp) => {
-        setUserId(resp.data); //token!!
-        // setToken(resp.data.token);
+        setUserId(resp.data);
         resolve(resp);
       })
       .catch((err) => {
@@ -26,10 +26,10 @@ export const userLogin = (user: UserDataSignIn) => {
   });
 };
 
-export const getUser = (id: AxiosRequestConfig): Promise<AxiosResponse> => {
+export const getUser = (id: string): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`user/getUser`, id)
+      .get(`user/getUser/${id}}`)
       .then((resp) => {
         resolve(resp);
       })
@@ -39,18 +39,21 @@ export const getUser = (id: AxiosRequestConfig): Promise<AxiosResponse> => {
   });
 };
 
-// export const addTaskDB = (id, task) => {
-//   return new Promise((resolve, reject) => {
-//     axios
-//       .post(`tasks/addTask`, { id, task })
-//       .then((resp) => {
-//         resolve(resp);
-//       })
-//       .catch((err) => {
-//         reject(err);
-//       });
-//   });
-// };
+export const addDrugToList = (
+  id: string,
+  drug: Drug
+): Promise<AxiosResponse> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`drugs/addDrug/${id}`, { drug })
+      .then((resp) => {
+        resolve(resp);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
 
 // export const getTasks = (id) => {
 //   return new Promise((resolve, reject) => {

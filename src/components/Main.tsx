@@ -2,7 +2,7 @@ import React from "react";
 
 import { Card, CardContent, CardHeader, Box, Container } from "@mui/material";
 
-const Main = () => {
+const Main: React.FC = () => {
   return (
     <Container sx={{ maxWidth: "70%", marginTop: "15vh" }}>
       <Card>

@@ -11,3 +11,12 @@ export type UserDataSignUp = {
   password: string;
   confirmation: string;
 };
+
+export interface UserData {
+  _id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  drugs?: Array<string>;
+  avatar?: string;
+}

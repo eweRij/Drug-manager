@@ -1,16 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
+
 import {
   Card,
   Container,
   CardContent,
   CardHeader,
   Box,
-  Button,
   CardActions,
   Link,
 } from "@mui/material";
+
 import { verifyUser } from "../utils/api";
-import { useParams, useMatch } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 
 const Welcome: React.FC = () => {
   const props = useMatch("/confirm/:confirmationCode");

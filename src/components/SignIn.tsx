@@ -14,7 +14,7 @@ import { useAppSelector } from "../utils/hooks";
 // import { useAppDispatch } from "../utils/hooks";
 
 const SignIn = () => {
-  const dispatch: Dispatch<any> = useDispatch();
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const formik = useFormik({
@@ -38,11 +38,7 @@ const SignIn = () => {
       navigate("/");
     });
   };
-  const isLogged: string | null = useAppSelector(
-    (state) => state.user.isLogged
-  );
-  console.log(isLogged);
-  console.log(formik.values);
+
   return (
     <Container maxWidth="sm" sx={{ marginTop: "25vh" }}>
       <Auth

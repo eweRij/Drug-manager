@@ -30,7 +30,7 @@ const SignUp = () => {
       .catch((err) => console.log(err));
   };
   return (
-    <Container maxWidth="sm" sx={{ marginTop: "10vh" }}>
+    <Container maxWidth="sm">
       <Auth
         title="Sign up"
         button_title="SIGN UP"
