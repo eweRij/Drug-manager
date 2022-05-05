@@ -9,8 +9,8 @@ const AuthLayout: React.FC = () => {
     <Router>
       <Routes>
         <Route path="/" element={<SignIn />}></Route>
-        <Route path="/register" element={<SignUp />}></Route>
-        <Route path="/confirm/:confirmationCode" element={<Welcome />}></Route>
+        <Route path="register" element={<SignUp />}></Route>
+        <Route path="confirm/:confirmationCode" element={<Welcome />}></Route>
       </Routes>
     </Router>
   );

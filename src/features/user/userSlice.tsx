@@ -5,7 +5,7 @@ import { getUser } from "../../utils/api";
 import { UserData } from "../../types/user";
 
 interface AppState {
-  isLogged: boolean;
+  isLogged: string;
   userData: UserData;
 }
 export const fetchUser = createAsyncThunk(
@@ -17,7 +17,7 @@ export const fetchUser = createAsyncThunk(
 );
 
 const initialState: AppState = {
-  isLogged: false,
+  isLogged: getUserId(),
   userData: { _id: "", first_name: "", last_name: "", email: "", drugs: [] },
 };
 
@@ -27,7 +27,8 @@ export const userSlice = createSlice({
   reducers: {
     setLogged: (state: AppState) => {
       console.log(getUserId());
-      return { ...state, isLogged: getUserId() ? true : false };
+      console.log("ustawiam is logged");
+      return { ...state, isLogged: getUserId() };
     },
   },
   extraReducers: {

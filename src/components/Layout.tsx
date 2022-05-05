@@ -12,9 +12,8 @@ const Layout: React.FC = () => {
       <Navigation></Navigation>
       <Routes>
         <Route path="/" element={<Main />}></Route>
-
-        <Route path="/profile" element={<Profile />}></Route>
-        <Route path="/drugmanager" element={<DrugManager />}></Route>
+        <Route path="profile" element={<Profile />}></Route>
+        <Route path="drugmanager" element={<DrugManager />}></Route>
       </Routes>
     </Router>
   );

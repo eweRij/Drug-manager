@@ -20,7 +20,7 @@ const pages = [
 ];
 const settings = [
   { name: "Profile", link: "/profile" },
-  { name: "Logout", link: "/register" },
+  { name: "Logout", link: "/login" },
 ];
 
 const ResponsiveAppBar: React.FC = () => {

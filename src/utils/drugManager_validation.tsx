@@ -1,4 +1,6 @@
 import { useFormik } from "formik";
+import "react-toastify/dist/ReactToastify.css";
+
 import { Drug } from "../types/drug";
 
 export const validate = (values: Drug) => {

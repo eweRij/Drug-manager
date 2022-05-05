@@ -8,6 +8,7 @@ import { validate } from "../utils/signIn_validation";
 import { useFormik } from "formik";
 import { userLogin } from "../utils/api";
 import { getUserId, getToken } from "../utils/auth";
+import { success_toast } from "../utils/toast";
 import selectUserLogged, { setLogged } from "../features/user/userSlice";
 import { useAppSelector } from "../utils/hooks";
 
@@ -35,7 +36,10 @@ const SignIn = () => {
       console.log(data);
       console.log(getUserId());
       dispatch(setLogged());
-      navigate("/");
+
+      success_toast("Bravo! Successfully logged in", true);
+      navigate("/home");
+      console.log("sprawdzam logowane");
     });
   };
 

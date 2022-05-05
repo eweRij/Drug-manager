@@ -5,6 +5,7 @@ import { validate } from "../utils/signUp_validation";
 import { useFormik } from "formik";
 import { UserDataSignUp } from "../types/user";
 import { userRegister } from "../utils/api";
+import { success_toast } from "../utils/toast";
 
 const SignUp = () => {
   const formik = useFormik({
@@ -26,7 +27,12 @@ const SignUp = () => {
     e.preventDefault();
     formik.handleSubmit();
     userRegister(formik.values)
-      .then((data) => console.log(data))
+      .then((data) => {
+        success_toast(
+          "Bravo! Successfully signed up.Check your mail now",
+          true
+        );
+      })
       .catch((err) => console.log(err));
   };
   return (

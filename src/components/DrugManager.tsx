@@ -1,7 +1,10 @@
 import React, { useEffect, SyntheticEvent } from "react";
+
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { makeStyles } from "@mui/styles";
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 import {
   Card,
@@ -15,28 +18,39 @@ import {
 } from "@mui/material";
 
 // import { useAppDispatch } from "../utils/hooks";
+import { setLogged } from "../features/user/userSlice";
 import { AppDispatch } from "../store/store";
 import { validate } from "../utils/drugManager_validation";
 import { fetchUser } from "../features/user/userSlice";
 import { addDrugToList } from "../utils/api";
 import { useAppSelector } from "../utils/hooks";
-import { getUserId } from "../utils/auth";
+import { getUserId, removeUserId } from "../utils/auth";
+import { success_toast, warning_toast } from "../utils/toast";
+
+import { Navigate } from "react-router-dom";
+import { Window } from "@mui/icons-material";
 
 const useStyles = makeStyles({
-  container: {
+  form: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    justifyContent: "center",
     maxWidth: "100%",
-    backgroundColor: "#F5ADAC",
   },
   header: {
     backgroundColor: "#F25E7A",
     color: "white",
     textAlign: "center",
   },
+  container: {
+    maxHeight: "70vh",
+    marginBottom: "20px",
+    overflow: "scroll",
+  },
 });
 const DrugManager = () => {
+  const navigate = useNavigate();
   const classes = useStyles();
   const dispatch = useDispatch<AppDispatch>();
   const user = useAppSelector((state) => state.user.userData);
@@ -78,23 +92,47 @@ const DrugManager = () => {
       alert(JSON.stringify(values, null, 2));
     },
   });
-
+  const wrong_authentication = () => {
+    warning_toast(
+      "Ups...your session has finished! You need to log in once again.",
+      false
+    );
+    removeUserId();
+    setTimeout(() => {
+      // window.location.reload();
+      dispatch(setLogged());
+      navigate("/");
+      window.location.reload();
+    }, 5000);
+  };
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     formik.handleSubmit();
     addDrugToList(user._id, formik.values)
-      .then((resp) => console.log(resp.status)) //do tostow
-      .catch((err) => console.log(err.response.status)); //do tostow
+      .then((resp) =>
+        success_toast("Great! New drug was added to the list.", true)
+      )
+      .catch((err) => err.response.status === 403 && wrong_authentication());
   };
 
   return (
     <Container sx={{ marginTop: "10vh" }}>
-      <Card sx={{ minWidth: 275 }}>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <Card sx={{ minWidth: 275 }} className={classes.container}>
         <CardHeader
           title={"Add you medication here"}
           className={classes.header}
         ></CardHeader>
-        <CardContent className={classes.container}>
+        <CardContent>
           <Box
             sx={{
               "& .MuiTextField-root": { m: 5, width: "50ch" },
@@ -103,6 +141,7 @@ const DrugManager = () => {
             noValidate
             autoComplete="off"
             onSubmit={handleSubmit}
+            className={classes.form}
           >
             <TextField
               id="drug_name"
@@ -183,16 +222,16 @@ const DrugManager = () => {
                 Boolean(formik.errors.additionalInfo)
               }
             />
+            <Button
+              component="button"
+              size="large"
+              color="info"
+              variant="contained"
+              type="submit"
+            >
+              Confirm
+            </Button>
           </Box>
-          <Button
-            component="button"
-            size="large"
-            color="info"
-            variant="contained"
-            type="submit"
-          >
-            Confirm
-          </Button>
         </CardContent>
       </Card>
     </Container>
