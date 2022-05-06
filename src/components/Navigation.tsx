@@ -1,5 +1,6 @@
 import * as React from "react";
-
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,7 +13,11 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { removeUserId } from "../utils/auth";
+
+import { getUserId, removeUserId } from "../utils/auth";
+import { success_toast } from "../utils/toast";
+import { setLogged } from "../features/user/userSlice";
+import { useAppSelector } from "../utils/hooks";
 
 const pages = [
   { name: "Profile", link: "/profile" },
@@ -23,7 +28,9 @@ const settings = [
   { name: "Logout", link: "/login" },
 ];
 
-const ResponsiveAppBar: React.FC = () => {
+const Navigation: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -46,8 +53,13 @@ const ResponsiveAppBar: React.FC = () => {
     setAnchorElUser(null);
   };
 
+  const isLogged: string = useAppSelector((state) => state.user.isLogged);
+  console.log(getUserId());
   const handleLogOut = (e: React.SyntheticEvent) => {
     removeUserId();
+    dispatch(setLogged());
+    success_toast("You were successfully logged out. See you again!", true);
+    navigate("/");
   };
 
   return (
@@ -150,12 +162,7 @@ const ResponsiveAppBar: React.FC = () => {
                   onClick={handleCloseUserMenu}
                 >
                   {setting.name === "Logout" ? (
-                    <Typography
-                      component="a"
-                      onClick={handleLogOut}
-                      href={setting.link}
-                      textAlign="center"
-                    >
+                    <Typography onClick={handleLogOut} textAlign="center">
                       {setting.name}
                     </Typography>
                   ) : (
@@ -181,4 +188,4 @@ const ResponsiveAppBar: React.FC = () => {
     </AppBar>
   );
 };
-export default ResponsiveAppBar;
+export default Navigation;

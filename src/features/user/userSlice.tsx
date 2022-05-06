@@ -26,8 +26,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setLogged: (state: AppState) => {
-      console.log(getUserId());
-      console.log("ustawiam is logged");
       return { ...state, isLogged: getUserId() };
     },
   },

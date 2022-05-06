@@ -1,18 +1,15 @@
-import React, { SyntheticEvent } from "react";
+import { SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, TextField } from "@mui/material";
-import { Dispatch } from "react";
 import { useDispatch } from "react-redux";
+import { useFormik } from "formik";
+
 import Auth from "./Auth";
 import { validate } from "../utils/signIn_validation";
-import { useFormik } from "formik";
 import { userLogin } from "../utils/api";
-import { getUserId, getToken } from "../utils/auth";
 import { success_toast } from "../utils/toast";
-import selectUserLogged, { setLogged } from "../features/user/userSlice";
-import { useAppSelector } from "../utils/hooks";
-
-// import { useAppDispatch } from "../utils/hooks";
+import { setLogged } from "../features/user/userSlice";
+import Toast from "./Toast";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -32,14 +29,10 @@ const SignIn = () => {
   const handleSignIn = (e: SyntheticEvent) => {
     e.preventDefault();
     formik.handleSubmit();
-    userLogin(formik.values).then((data) => {
-      console.log(data);
-      console.log(getUserId());
+    userLogin(formik.values).then(() => {
       dispatch(setLogged());
-
       success_toast("Bravo! Successfully logged in", true);
       navigate("/home");
-      console.log("sprawdzam logowane");
     });
   };
 

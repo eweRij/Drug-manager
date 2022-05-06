@@ -1,9 +1,8 @@
-import React, { useEffect, SyntheticEvent } from "react";
+import { useEffect, SyntheticEvent } from "react";
 
 import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { makeStyles } from "@mui/styles";
-import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -17,7 +16,6 @@ import {
   MenuItem,
 } from "@mui/material";
 
-// import { useAppDispatch } from "../utils/hooks";
 import { setLogged } from "../features/user/userSlice";
 import { AppDispatch } from "../store/store";
 import { validate } from "../utils/drugManager_validation";
@@ -26,9 +24,6 @@ import { addDrugToList } from "../utils/api";
 import { useAppSelector } from "../utils/hooks";
 import { getUserId, removeUserId } from "../utils/auth";
 import { success_toast, warning_toast } from "../utils/toast";
-
-import { Navigate } from "react-router-dom";
-import { Window } from "@mui/icons-material";
 
 const useStyles = makeStyles({
   form: {
@@ -99,34 +94,20 @@ const DrugManager = () => {
     );
     removeUserId();
     setTimeout(() => {
-      // window.location.reload();
-      dispatch(setLogged());
-      navigate("/");
-      window.location.reload();
+      removeUserId();
+      navigate("/login");
     }, 5000);
   };
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     formik.handleSubmit();
     addDrugToList(user._id, formik.values)
-      .then((resp) =>
-        success_toast("Great! New drug was added to the list.", true)
-      )
+      .then(() => success_toast("Great! New drug was added to the list.", true))
       .catch((err) => err.response.status === 403 && wrong_authentication());
   };
 
   return (
     <Container sx={{ marginTop: "10vh" }}>
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <Card sx={{ minWidth: 275 }} className={classes.container}>
         <CardHeader
           title={"Add you medication here"}

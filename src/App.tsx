@@ -1,21 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  useRoutes,
-} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import "./App.scss";
 import "./components/AuthLayout.scss";
 
-import AuthLayout from "./components/AuthLayout";
 import { useAppSelector } from "./utils/hooks";
 import { setLogged } from "./features/user/userSlice";
-import Layout from "./components/Layout";
-
 import ProtectedRoute from "./components/ProtectedRoute";
 import Navigation from "./components/Navigation";
 import Main from "./components/Main";
@@ -28,13 +19,12 @@ import Welcome from "./components/Welcome";
 const App: React.FC = () => {
   const dispatch = useDispatch();
 
-  console.log("reload");
   useEffect(() => {
     dispatch(setLogged());
-    console.log("appprzelogowany");
+    console.log(isLogged);
   }, []);
   const isLogged: string = useAppSelector((state) => state.user.isLogged);
-  console.log(isLogged);
+
   return (
     <div className="authlayout-container">
       {isLogged && <Navigation></Navigation>}
