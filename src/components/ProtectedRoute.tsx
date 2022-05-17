@@ -3,14 +3,9 @@ import { useDispatch } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 
 import { useAppSelector } from "../utils/hooks";
-import { setLogged } from "../features/user/userSlice";
 
 const ProtectedRoute: React.FC = ({ children }: any) => {
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(setLogged());
-  });
 
   const isLogged: string = useAppSelector((state) => state.user.isLogged);
   const location = useLocation();

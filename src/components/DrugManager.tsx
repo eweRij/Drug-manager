@@ -1,8 +1,7 @@
-import { useEffect, SyntheticEvent } from "react";
+import { SyntheticEvent } from "react";
 
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
-import { makeStyles } from "@mui/styles";
+
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -16,44 +15,18 @@ import {
   MenuItem,
 } from "@mui/material";
 
-import { setLogged } from "../features/user/userSlice";
-import { AppDispatch } from "../store/store";
+import { useStyles } from "../classes/classes";
 import { validate } from "../utils/drugManager_validation";
-import { fetchUser } from "../features/user/userSlice";
 import { addDrugToList } from "../utils/api";
 import { useAppSelector } from "../utils/hooks";
 import { getUserId, removeUserId } from "../utils/auth";
 import { success_toast, warning_toast } from "../utils/toast";
+import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles({
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    maxWidth: "100%",
-  },
-  header: {
-    backgroundColor: "#F25E7A",
-    color: "white",
-    textAlign: "center",
-  },
-  container: {
-    maxHeight: "70vh",
-    marginBottom: "20px",
-    overflow: "scroll",
-  },
-});
-const DrugManager = () => {
+const DrugManager: React.FC = () => {
   const navigate = useNavigate();
   const classes = useStyles();
-  const dispatch = useDispatch<AppDispatch>();
   const user = useAppSelector((state) => state.user.userData);
-  const id = getUserId();
-
-  useEffect(() => {
-    dispatch(fetchUser(id));
-  }, []);
 
   const daytime_options = [
     {
@@ -108,7 +81,10 @@ const DrugManager = () => {
 
   return (
     <Container sx={{ marginTop: "10vh" }}>
-      <Card sx={{ minWidth: 275 }} className={classes.container}>
+      <Card
+        sx={{ minWidth: 275, overflow: "scroll" }}
+        className={classes.container}
+      >
         <CardHeader
           title={"Add you medication here"}
           className={classes.header}

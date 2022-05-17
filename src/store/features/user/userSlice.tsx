@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getUserId } from "../../utils/auth";
-import { getUser } from "../../utils/api";
-import { UserData } from "../../types/user";
+import { getUserId } from "../../../utils/auth";
+import { getUser } from "../../../utils/api";
+import { UserData } from "../../../types/user";
 
 interface AppState {
   isLogged: string;
@@ -17,7 +17,7 @@ export const fetchUser = createAsyncThunk(
 );
 
 const initialState: AppState = {
-  isLogged: getUserId(),
+  isLogged: getUserId(), //do przerobki
   userData: { _id: "", first_name: "", last_name: "", email: "", drugs: [] },
 };
 

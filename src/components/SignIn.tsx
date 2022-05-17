@@ -8,12 +8,10 @@ import Auth from "./Auth";
 import { validate } from "../utils/signIn_validation";
 import { userLogin } from "../utils/api";
 import { success_toast } from "../utils/toast";
-import { setLogged } from "../features/user/userSlice";
-import Toast from "./Toast";
+import { setLogged } from "../store/features/user/userSlice";
 
-const SignIn = () => {
+const SignIn: React.FC = () => {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {

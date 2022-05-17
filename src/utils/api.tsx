@@ -93,25 +93,27 @@ export const addDrugToList = (
 //       });
 //   });
 // };
-// export const setAvatar = (userId, avatar) => {
-//   return new Promise((resolve, reject) => {
-//     const avatarArray = Array.from(avatar);
-//     let formData = new FormData();
-//     formData.append("avatar", avatarArray[0]);
-//     axios
-//       .patch(`/user/${userId}/avatar`, formData, {
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//         },
-//       })
-//       .then((resp) => {
-//         resolve(resp);
-//       })
-//       .catch((err) => {
-//         reject(err);
-//       });
-//   });
-// };
+export const setAvatar = (id: string, avatar: any) => {
+  return new Promise((resolve, reject) => {
+    const avatarArray: any = Array.from(avatar);
+
+    let formData = new FormData();
+    formData.append("avatar", avatarArray[0]);
+    console.log(avatarArray, formData);
+    axios
+      .patch(`/user/${id}/avatar`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((resp) => {
+        resolve(resp);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
 
 export const verifyUser = (confirmationCode: string | undefined) => {
   return new Promise((resolve, reject) => {

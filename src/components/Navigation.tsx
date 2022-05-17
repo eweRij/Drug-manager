@@ -14,23 +14,34 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
-import { getUserId, removeUserId } from "../utils/auth";
+import { removeUserId } from "../utils/auth";
 import { success_toast } from "../utils/toast";
-import { setLogged } from "../features/user/userSlice";
+import { setLogged } from "../store/features/user/userSlice";
 import { useAppSelector } from "../utils/hooks";
+import { makeStyles } from "@mui/styles";
 
 const pages = [
   { name: "Profile", link: "/profile" },
   { name: "Drug Manager", link: "/drugmanager" },
+  { name: "Home", link: "/home" },
 ];
 const settings = [
   { name: "Profile", link: "/profile" },
   { name: "Logout", link: "/login" },
 ];
-
+const useStyles = makeStyles({
+  toolbar: { paddingLeft: "24px", paddingRight: "24px" },
+  logo: {
+    marginRight: "24px !important",
+  },
+  menuItem: {
+    marginRight: "24px !important",
+  },
+});
 const Navigation: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const classes = useStyles();
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -53,8 +64,6 @@ const Navigation: React.FC = () => {
     setAnchorElUser(null);
   };
 
-  const isLogged: string = useAppSelector((state) => state.user.isLogged);
-  console.log(getUserId());
   const handleLogOut = (e: React.SyntheticEvent) => {
     removeUserId();
     dispatch(setLogged());
@@ -65,12 +74,13 @@ const Navigation: React.FC = () => {
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar className={classes.toolbar} disableGutters>
           <Typography
             variant="h6"
             noWrap
             component="div"
             sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+            className={classes.logo}
           >
             LOGO
           </Typography>
@@ -124,6 +134,7 @@ const Navigation: React.FC = () => {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
+                className={classes.menuItem}
                 key={page.name + page.link}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block" }}
@@ -160,6 +171,7 @@ const Navigation: React.FC = () => {
                 <MenuItem
                   key={setting.link + setting.name}
                   onClick={handleCloseUserMenu}
+                  className={classes.menuItem}
                 >
                   {setting.name === "Logout" ? (
                     <Typography onClick={handleLogOut} textAlign="center">

@@ -20,3 +20,8 @@ export interface UserData {
   drugs?: Array<string>;
   avatar?: string;
 }
+
+export interface UserDataEdit {
+  first_name: string;
+  last_name: string;
+}

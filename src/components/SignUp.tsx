@@ -1,13 +1,12 @@
-import { ReactEventHandler, SyntheticEvent, useState } from "react";
+import { SyntheticEvent } from "react";
 import Auth from "./Auth";
 import { Container, TextField } from "@mui/material";
 import { validate } from "../utils/signUp_validation";
 import { useFormik } from "formik";
-import { UserDataSignUp } from "../types/user";
 import { userRegister } from "../utils/api";
 import { success_toast } from "../utils/toast";
 
-const SignUp = () => {
+const SignUp:React.FC = () => {
   const formik = useFormik({
     initialValues: {
       first_name: "",
@@ -27,7 +26,7 @@ const SignUp = () => {
     e.preventDefault();
     formik.handleSubmit();
     userRegister(formik.values)
-      .then((data) => {
+      .then(() => {
         success_toast(
           "Bravo! Successfully signed up.Check your mail now",
           true
@@ -36,7 +35,7 @@ const SignUp = () => {
       .catch((err) => console.log(err));
   };
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{ marginTop: "3vh" }}>
       <Auth
         title="Sign up"
         button_title="SIGN UP"
