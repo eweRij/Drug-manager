@@ -22,6 +22,7 @@ export interface UserData {
 }
 
 export interface UserDataEdit {
-  first_name: string;
-  last_name: string;
+  first_name?: string | undefined;
+  last_name?: string | undefined;
+  email?: string | undefined;
 }

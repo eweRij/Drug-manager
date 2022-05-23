@@ -5,6 +5,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 import Layout from "../components/Layout";
+import Welcome from "../components/Welcome";
 
 export const ROUTES = {
   path: "/",
@@ -17,6 +18,7 @@ export const ROUTES = {
     { path: "*", element: <div>No page is selected</div> },
     { path: "/", element: <SignIn></SignIn> },
     { path: "register", element: <SignUp></SignUp> },
+    { path: "confirm/:confirmationCode", element: <Welcome></Welcome> },
     {
       path: "home",
       element: (

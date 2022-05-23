@@ -32,7 +32,7 @@ import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { fetchUser } from "../store/features/user/userSlice";
 import { useAppSelector } from "../utils/hooks";
 import { error_toast, warning_toast } from "../utils/toast";
-import { setAvatar } from "../utils/api";
+import { editUserNames, setAvatar } from "../utils/api";
 import { Navigate, useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { useStyles } from "../classes/classes";
@@ -46,6 +46,7 @@ const Profile: React.FC = () => {
   const id = useAppSelector((state) => state.user.isLogged);
   const user = useAppSelector((state) => state.user.userData);
   const [show, setShow] = useState<boolean>(false);
+  const [elementToEdit, setElementToEdit] = useState<string>("");
 
   const USER_DATA = user && [
     {
@@ -57,16 +58,17 @@ const Profile: React.FC = () => {
       icon: <AlternateEmailTwoToneIcon />,
     },
   ];
-  console.log(USER_DATA[0].icon);
+
   useEffect(() => {
     dispatch(fetchUser(id));
   }, []);
-  console.log(user);
-  const handleShow = () => {
+
+  const handleShow = (name: string): void => {
+    setElementToEdit(name);
     setShow((prev) => !prev);
   };
 
-  const formik = useFormik({
+  const formikNames = useFormik({
     initialValues: {
       first_name: user && user.first_name,
       last_name: user && user.last_name,
@@ -76,11 +78,21 @@ const Profile: React.FC = () => {
       alert(JSON.stringify(values, null, 2));
     },
   });
+
+  const formikEmail = useFormik({
+    initialValues: {
+      email: user && user.email,
+    },
+    validate,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
   const handleSetAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
-    setAvatar(user._id, files)
+    setAvatar(id, files)
       .then(() => {
-        dispatch(fetchUser(user._id));
+        dispatch(fetchUser(id));
       })
       .catch((err) => {
         if (err.response.status === 500) {
@@ -91,6 +103,27 @@ const Profile: React.FC = () => {
         }
       });
   };
+  const handleEditUserNames = (e: SyntheticEvent) => {
+    e.preventDefault();
+    formikNames.handleSubmit();
+    console.log(formikNames.values);
+    editUserNames(
+      id,
+      formikNames.values.first_name,
+      formikNames.values.last_name
+    )
+      .then(() => {
+        dispatch(fetchUser(id));
+        setShow(false);
+      })
+      .catch((err) => {
+        if (err.response.status === 403) {
+          warning_toast("Session has finished. You need to log in!", true);
+          navigate("/");
+        }
+      });
+  };
+
   return (
     <Container sx={{ marginTop: "10vh" }}>
       <Card sx={{ minWidth: 275 }} className={classes.container}>
@@ -133,7 +166,7 @@ const Profile: React.FC = () => {
                         <ListItemIcon>
                           <ModeEditOutlineTwoToneIcon
                             className={classes.editButton}
-                            onClick={handleShow}
+                            onClick={(e) => handleShow(el.name)}
                           />
                         </ListItemIcon>
                       </ListItem>
@@ -148,40 +181,62 @@ const Profile: React.FC = () => {
                   component="form"
                   noValidate
                   autoComplete="off"
-                  // onSubmit={handleSubmit}
+                  onSubmit={handleEditUserNames}
                   className={classes.form}
                 >
-                  <TextField
-                    sx={{
-                      marginBottom: " !important",
-                      marginTop: "0 !important",
-                    }}
-                    id="first_ name"
-                    label="First name"
-                    variant="standard"
-                    type="text"
-                    // onChange={formik.handleChange}
-                    // value={formik.values.drug_name}
-                    // error={
-                    //   formik.touched.drug_name && Boolean(formik.errors.drug_name)
-                    // }
-                  />
-
-                  <TextField
-                    sx={{
-                      marginBottom: "1rem !important",
-                      marginTop: "0 !important",
-                    }}
-                    id="last_ name"
-                    label="Last name"
-                    variant="standard"
-                    type="text"
-                    // onChange={formik.handleChange}
-                    // value={formik.values.drug_name}
-                    // error={
-                    //   formik.touched.drug_name && Boolean(formik.errors.drug_name)
-                    // }
-                  />
+                  {elementToEdit === user.email ? (
+                    <TextField
+                      sx={{
+                        marginBottom: " !important",
+                        marginTop: "0 !important",
+                      }}
+                      id="email"
+                      label="Email"
+                      variant="standard"
+                      type="email"
+                      onChange={formikEmail.handleChange}
+                      value={formikEmail.values.email}
+                      error={
+                        formikEmail.touched.email &&
+                        Boolean(formikEmail.errors.email)
+                      }
+                    />
+                  ) : (
+                    <>
+                      <TextField
+                        sx={{
+                          marginBottom: " !important",
+                          marginTop: "0 !important",
+                        }}
+                        id="first_name"
+                        label="First name"
+                        variant="standard"
+                        type="text"
+                        onChange={formikNames.handleChange}
+                        value={formikNames.values.first_name}
+                        error={
+                          formikNames.touched.first_name &&
+                          Boolean(formikNames.errors.first_name)
+                        }
+                      />
+                      <TextField
+                        sx={{
+                          marginBottom: "1rem !important",
+                          marginTop: "0 !important",
+                        }}
+                        id="last_name"
+                        label="Last name"
+                        variant="standard"
+                        type="text"
+                        onChange={formikNames.handleChange}
+                        value={formikNames.values.last_name}
+                        error={
+                          formikNames.touched.last_name &&
+                          Boolean(formikNames.errors.last_name)
+                        }
+                      />
+                    </>
+                  )}
                   <Button
                     component="button"
                     color="success"

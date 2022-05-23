@@ -114,15 +114,35 @@ export const setAvatar = (id: string, avatar: any) => {
       });
   });
 };
+export const editUserNames = (
+  id: string,
+  first_name: string | undefined,
+  last_name: string | undefined
+) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .patch(`user/${id}/editUserNames`, { first_name, last_name })
+      .then((resp) => {
+        console.log(resp);
+        resolve(resp);
+      })
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
+  });
+};
 
 export const verifyUser = (confirmationCode: string | undefined) => {
   return new Promise((resolve, reject) => {
     axios
       .patch(`user/confirm/${confirmationCode}`)
       .then((resp) => {
+        console.log(resp);
         resolve(resp);
       })
       .catch((err) => {
+        console.log(err);
         reject(err);
       });
   });
