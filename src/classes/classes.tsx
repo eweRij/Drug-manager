@@ -47,4 +47,10 @@ export const useStyles = makeStyles({
   editButton: {
     marginLeft: "2rem",
   },
+  buttonBox: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "space-between",
+    padding: "40px",
+  },
 });

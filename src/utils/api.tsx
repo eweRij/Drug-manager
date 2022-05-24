@@ -99,7 +99,6 @@ export const setAvatar = (id: string, avatar: any) => {
 
     let formData = new FormData();
     formData.append("avatar", avatarArray[0]);
-    console.log(avatarArray, formData);
     axios
       .patch(`/user/${id}/avatar`, formData, {
         headers: {
@@ -118,16 +117,30 @@ export const editUserNames = (
   id: string,
   first_name: string | undefined,
   last_name: string | undefined
-) => {
+): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
     axios
       .patch(`user/${id}/editUserNames`, { first_name, last_name })
       .then((resp) => {
-        console.log(resp);
         resolve(resp);
       })
       .catch((err) => {
-        console.log(err);
+        reject(err);
+      });
+  });
+};
+
+export const editUserEmail = (
+  id: string,
+  email: string | undefined
+): Promise<AxiosResponse> => {
+  return new Promise((resolve, reject) => {
+    axios
+      .patch(`user/${id}/editEmail`, { email })
+      .then((resp) => {
+        resolve(resp);
+      })
+      .catch((err) => {
         reject(err);
       });
   });
@@ -138,11 +151,9 @@ export const verifyUser = (confirmationCode: string | undefined) => {
     axios
       .patch(`user/confirm/${confirmationCode}`)
       .then((resp) => {
-        console.log(resp);
         resolve(resp);
       })
       .catch((err) => {
-        console.log(err);
         reject(err);
       });
   });

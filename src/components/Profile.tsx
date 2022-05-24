@@ -1,40 +1,26 @@
 import React, { SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Box,
-  Container,
-  TextField,
-  SvgIconTypeMap,
-} from "@mui/material";
+import { Card, CardContent, CardHeader, Box, Container } from "@mui/material";
 import AlternateEmailTwoToneIcon from "@mui/icons-material/AlternateEmailTwoTone";
 import BadgeTwoToneIcon from "@mui/icons-material/BadgeTwoTone";
-import MedicationTwoToneIcon from "@mui/icons-material/MedicationTwoTone";
-import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import ModeEditOutlineTwoToneIcon from "@mui/icons-material/ModeEditOutlineTwoTone";
 
 import {
   Avatar,
-  IconButton,
   List,
   ListItemIcon,
   ListItem,
-  Typography,
   Grid,
   ListItemText,
 } from "@material-ui/core";
 import { Button } from "@mui/material";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
-
+import EditForm from "./EditForm";
 import { fetchUser } from "../store/features/user/userSlice";
 import { useAppSelector } from "../utils/hooks";
 import { error_toast, warning_toast } from "../utils/toast";
-import { editUserNames, setAvatar } from "../utils/api";
-import { Navigate, useNavigate } from "react-router-dom";
-import { makeStyles } from "@mui/styles";
+import { editUserEmail, editUserNames, setAvatar } from "../utils/api";
+import { useNavigate } from "react-router-dom";
 import { useStyles } from "../classes/classes";
 import { useFormik } from "formik";
 import { validate } from "../utils/edit_validation";
@@ -106,7 +92,6 @@ const Profile: React.FC = () => {
   const handleEditUserNames = (e: SyntheticEvent) => {
     e.preventDefault();
     formikNames.handleSubmit();
-    console.log(formikNames.values);
     editUserNames(
       id,
       formikNames.values.first_name,
@@ -123,7 +108,21 @@ const Profile: React.FC = () => {
         }
       });
   };
-
+  const handleEditUserEmail = (e: SyntheticEvent) => {
+    e.preventDefault();
+    formikEmail.handleSubmit();
+    editUserEmail(id, formikEmail.values.email)
+      .then(() => {
+        dispatch(fetchUser(id));
+        setShow(false);
+      })
+      .catch((err) => {
+        if (err.response.status === 403) {
+          warning_toast("Session has finished. You need to log in!", true);
+          navigate("/");
+        }
+      });
+  };
   return (
     <Container sx={{ marginTop: "10vh" }}>
       <Card sx={{ minWidth: 275 }} className={classes.container}>
@@ -135,7 +134,9 @@ const Profile: React.FC = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <div className={classes.avatar}>
-                <h2>Hi {user && user.first_name}!</h2>
+                <h2 style={{ marginBottom: "20px" }}>
+                  Hi {user && user.first_name}!
+                </h2>
                 <input
                   onChange={(e) => {
                     handleSetAvatar(e);
@@ -181,18 +182,17 @@ const Profile: React.FC = () => {
                   component="form"
                   noValidate
                   autoComplete="off"
-                  onSubmit={handleEditUserNames}
+                  onSubmit={
+                    elementToEdit === user.email
+                      ? handleEditUserEmail
+                      : handleEditUserNames
+                  }
                   className={classes.form}
                 >
                   {elementToEdit === user.email ? (
-                    <TextField
-                      sx={{
-                        marginBottom: " !important",
-                        marginTop: "0 !important",
-                      }}
+                    <EditForm
                       id="email"
                       label="Email"
-                      variant="standard"
                       type="email"
                       onChange={formikEmail.handleChange}
                       value={formikEmail.values.email}
@@ -203,14 +203,9 @@ const Profile: React.FC = () => {
                     />
                   ) : (
                     <>
-                      <TextField
-                        sx={{
-                          marginBottom: " !important",
-                          marginTop: "0 !important",
-                        }}
+                      <EditForm
                         id="first_name"
                         label="First name"
-                        variant="standard"
                         type="text"
                         onChange={formikNames.handleChange}
                         value={formikNames.values.first_name}
@@ -219,14 +214,9 @@ const Profile: React.FC = () => {
                           Boolean(formikNames.errors.first_name)
                         }
                       />
-                      <TextField
-                        sx={{
-                          marginBottom: "1rem !important",
-                          marginTop: "0 !important",
-                        }}
+                      <EditForm
                         id="last_name"
                         label="Last name"
-                        variant="standard"
                         type="text"
                         onChange={formikNames.handleChange}
                         value={formikNames.values.last_name}
@@ -237,15 +227,26 @@ const Profile: React.FC = () => {
                       />
                     </>
                   )}
-                  <Button
-                    component="button"
-                    color="success"
-                    size="small"
-                    variant="contained"
-                    type="submit"
-                  >
-                    Confirm
-                  </Button>
+                  <Box component="div" className={classes.buttonBox}>
+                    <Button
+                      component="button"
+                      color="success"
+                      size="small"
+                      variant="contained"
+                      type="submit"
+                    >
+                      Confirm
+                    </Button>
+                    <Button
+                      component="button"
+                      color="error"
+                      size="small"
+                      variant="contained"
+                      onClick={() => setShow((prev) => !prev)}
+                    >
+                      Cancel
+                    </Button>
+                  </Box>
                 </Box>
               )}
             </Grid>
