@@ -74,6 +74,7 @@ const DrugManager: React.FC = () => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     formik.handleSubmit();
+    console.log(user);
     addDrugToList(user._id, formik.values)
       .then(() => success_toast("Great! New drug was added to the list.", true))
       .catch((err) => err.response.status === 403 && wrong_authentication());

@@ -3,16 +3,17 @@ import { useDispatch } from "react-redux";
 
 import { useAppSelector } from "./utils/hooks";
 import Routes from "./components/Routes";
-import { setLogged } from "./store/features/user/userSlice";
+import { fetchUser, setLogged } from "./store/features/user/userSlice";
 import Navigation from "./components/Navigation";
 
 const App: React.FC = () => {
+  const isLogged: string = useAppSelector((state) => state.user.isLogged);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setLogged());
+    dispatch(fetchUser(isLogged));
   }, []);
-  const isLogged: string = useAppSelector((state) => state.user.isLogged);
 
   return (
     <div>

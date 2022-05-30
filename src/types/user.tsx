@@ -1,3 +1,5 @@
+import { Drug } from "./drug";
+
 export type UserDataSignIn = {
   login: string;
   password: string;
@@ -17,7 +19,7 @@ export interface UserData {
   first_name: string;
   last_name: string;
   email: string;
-  drugs?: Array<string>;
+  drugs?: Array<Drug>;
   avatar?: string;
 }
 
