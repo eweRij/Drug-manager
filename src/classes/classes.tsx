@@ -2,8 +2,7 @@ import { makeStyles } from "@mui/styles";
 export const useStyles = makeStyles({
   container: {
     minWidth: "275px",
-    maxHeight: "70vh",
-    marginBottom: "20px",
+    marginBottom: "4rem",
   },
   form: {
     display: "flex",
@@ -52,5 +51,24 @@ export const useStyles = makeStyles({
     width: "100%",
     justifyContent: "space-between",
     padding: "40px",
+  },
+  drugList: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
+  drugCard: {
+    height: "350px",
+    width: "250px",
+    marginBottom: "1rem",
+    cursor: "pointer",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-end",
+  },
+  cardContainer: {
+    paddingLeft: "2rem !important",
+    paddingRight: "2rem !important",
   },
 });
