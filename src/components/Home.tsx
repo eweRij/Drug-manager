@@ -16,7 +16,7 @@ import { UserData } from "../types/user";
 import { Drug } from "../types/drug";
 import { useAppSelector } from "../utils/hooks";
 
-const Main: React.FC = () => {
+const Home: React.FC = () => {
   const user: UserData = useAppSelector((state) => state.user.userData);
   const drugs: Drug[] | undefined = user && user.drugs;
   const classes = useStyles();
@@ -93,11 +93,10 @@ const Main: React.FC = () => {
                 );
               })}
           </ul>
-          {/* </Box> */}
         </CardContent>
       </Card>
     </Container>
   );
 };
 
-export default Main;
+export default Home;

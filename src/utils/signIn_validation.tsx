@@ -1,5 +1,4 @@
-import { Formik, useFormik } from "formik";
-import { UserDataSignIn, UserDataSignUp } from "../types/user";
+import { UserDataSignIn } from "../types/user";
 
 export const validate = (values: UserDataSignIn) => {
   const errors: UserDataSignIn = {

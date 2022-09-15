@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { Card, CardContent, CardHeader, Box, Container } from "@mui/material";
@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import { Button } from "@mui/material";
 import EditForm from "./EditForm";
-import { fetchUser } from "../store/features/user/userSlice";
+import { fetchUser, selectUserData } from "../store/features/user/userSlice";
 import { useAppSelector } from "../utils/hooks";
 import { error_toast, warning_toast } from "../utils/toast";
 import { editUserEmail, editUserNames, setAvatar } from "../utils/api";
@@ -29,11 +29,10 @@ const Profile: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const classes = useStyles();
-  const id = useAppSelector((state) => state.user.isLogged);
-  const user = useAppSelector((state) => state.user.userData);
+  const user = useAppSelector(selectUserData);
   const [show, setShow] = useState<boolean>(false);
   const [elementToEdit, setElementToEdit] = useState<string>("");
-
+  console.log(user);
   const USER_DATA = user && [
     {
       name: user.first_name + " " + user.last_name,
@@ -45,10 +44,6 @@ const Profile: React.FC = () => {
     },
   ];
 
-  useEffect(() => {
-    dispatch(fetchUser(id));
-  }, []);
-
   const handleShow = (name: string): void => {
     setElementToEdit(name);
     setShow((prev) => !prev);
@@ -56,8 +51,8 @@ const Profile: React.FC = () => {
 
   const formikNames = useFormik({
     initialValues: {
-      first_name: user && user.first_name,
-      last_name: user && user.last_name,
+      first_name: user?.first_name,
+      last_name: user?.last_name,
     },
     validate,
     onSubmit: (values) => {
@@ -76,16 +71,13 @@ const Profile: React.FC = () => {
   });
   const handleSetAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
-    setAvatar(id, files)
+    setAvatar(user._id, files)
       .then(() => {
-        dispatch(fetchUser(id));
+        dispatch(fetchUser(user._id));
       })
       .catch((err) => {
         if (err.response.status === 500) {
           error_toast("File size cannot be larger than 2MB!", true);
-        } else if (err.response.status === 403) {
-          warning_toast("Session has finished. You need to log in!", true);
-          navigate("/");
         }
       });
   };
@@ -93,12 +85,12 @@ const Profile: React.FC = () => {
     e.preventDefault();
     formikNames.handleSubmit();
     editUserNames(
-      id,
+      user._id,
       formikNames.values.first_name,
       formikNames.values.last_name
     )
       .then(() => {
-        dispatch(fetchUser(id));
+        dispatch(fetchUser(user._id));
         setShow(false);
       })
       .catch((err) => {
@@ -111,9 +103,9 @@ const Profile: React.FC = () => {
   const handleEditUserEmail = (e: SyntheticEvent) => {
     e.preventDefault();
     formikEmail.handleSubmit();
-    editUserEmail(id, formikEmail.values.email)
+    editUserEmail(user._id, formikEmail.values.email)
       .then(() => {
-        dispatch(fetchUser(id));
+        dispatch(fetchUser(user._id));
         setShow(false);
       })
       .catch((err) => {

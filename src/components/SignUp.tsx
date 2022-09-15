@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import { userRegister } from "../utils/api";
 import { success_toast } from "../utils/toast";
 
-const SignUp:React.FC = () => {
+const SignUp: React.FC = () => {
   const formik = useFormik({
     initialValues: {
       first_name: "",
@@ -25,14 +25,9 @@ const SignUp:React.FC = () => {
   const handleSignUp = (e: SyntheticEvent) => {
     e.preventDefault();
     formik.handleSubmit();
-    userRegister(formik.values)
-      .then(() => {
-        success_toast(
-          "Bravo! Successfully signed up.Check your mail now",
-          true
-        );
-      })
-      .catch((err) => console.log(err));
+    userRegister(formik.values).then(() => {
+      success_toast("Bravo! Successfully signed up.Check your mail now", true);
+    });
   };
   return (
     <Container maxWidth="sm" sx={{ marginTop: "3vh" }}>

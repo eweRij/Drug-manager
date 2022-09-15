@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
@@ -14,11 +14,11 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
-import { removeUserId } from "../utils/auth";
 import { success_toast } from "../utils/toast";
 import { setLogged } from "../store/features/user/userSlice";
-import { useAppSelector } from "../utils/hooks";
+
 import { makeStyles } from "@mui/styles";
+import { setLoggedOut } from "../utils/auth";
 
 const pages = [
   { name: "Profile", link: "/profile" },
@@ -27,7 +27,7 @@ const pages = [
 ];
 const settings = [
   { name: "Profile", link: "/profile" },
-  { name: "Logout", link: "/login" },
+  { name: "Logout", link: "/" },
 ];
 const useStyles = makeStyles({
   toolbar: { paddingLeft: "24px", paddingRight: "24px" },
@@ -42,12 +42,8 @@ const Navigation: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const classes = useStyles();
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -65,7 +61,7 @@ const Navigation: React.FC = () => {
   };
 
   const handleLogOut = (e: React.SyntheticEvent) => {
-    removeUserId();
+    setLoggedOut();
     dispatch(setLogged());
     success_toast("You were successfully logged out. See you again!", true);
     navigate("/");

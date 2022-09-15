@@ -1,9 +1,6 @@
 import { SyntheticEvent } from "react";
-
 import { useFormik } from "formik";
-
 import { useNavigate } from "react-router-dom";
-
 import {
   Card,
   CardContent,
@@ -19,14 +16,14 @@ import { useStyles } from "../classes/classes";
 import { validate } from "../utils/drugManager_validation";
 import { addDrugToList } from "../utils/api";
 import { useAppSelector } from "../utils/hooks";
-import { getUserId, removeUserId } from "../utils/auth";
 import { success_toast, warning_toast } from "../utils/toast";
-import { makeStyles } from "@mui/styles";
+import { setLoggedOut } from "../utils/auth";
+import { selectUserData } from "../store/features/user/userSlice";
 
 const DrugManager: React.FC = () => {
   const navigate = useNavigate();
   const classes = useStyles();
-  const user = useAppSelector((state) => state.user.userData);
+  const user = useAppSelector(selectUserData);
 
   const daytime_options = [
     {
@@ -65,16 +62,14 @@ const DrugManager: React.FC = () => {
       "Ups...your session has finished! You need to log in once again.",
       false
     );
-    removeUserId();
+    setLoggedOut();
     setTimeout(() => {
-      removeUserId();
-      navigate("/login");
+      navigate("/");
     }, 5000);
   };
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     formik.handleSubmit();
-    console.log(user);
     addDrugToList(user._id, formik.values)
       .then(() => success_toast("Great! New drug was added to the list.", true))
       .catch((err) => err.response.status === 403 && wrong_authentication());

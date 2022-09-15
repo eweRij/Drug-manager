@@ -1,7 +1,6 @@
-import { AxiosRequestConfig, AxiosResponse } from "axios";
-
+import { AxiosResponse } from "axios";
 import axios from "./axios";
-import { setToken, setUserId } from "./auth";
+import { setLoggedIn, setUserLoggedOut } from "./auth";
 import { UserDataSignUp, UserDataSignIn } from "../types/user";
 import { Drug } from "../types/drug";
 
@@ -12,12 +11,12 @@ export const userRegister = async (user: UserDataSignUp): Promise<void> => {
     .catch((err) => console.log(err));
 };
 
-export const userLogin = (user: UserDataSignIn) => {
+export const userLogin = (user: UserDataSignIn): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
     axios
       .post(`user/login`, user)
       .then((resp) => {
-        setUserId(resp.data);
+        setLoggedIn();
         resolve(resp);
       })
       .catch((err) => {
@@ -31,9 +30,13 @@ export const getUser = (id: string): Promise<AxiosResponse> => {
     axios
       .get(`user/getUser/${id}}`)
       .then((resp) => {
+        console.log("pobieram usera");
         resolve(resp);
       })
       .catch((err) => {
+        if (err.response.status === 403) {
+          setUserLoggedOut();
+        }
         reject(err);
       });
   });
@@ -50,6 +53,9 @@ export const addDrugToList = (
         resolve(resp);
       })
       .catch((err) => {
+        if (err.response.status === 403) {
+          setUserLoggedOut();
+        }
         reject(err);
       });
   });
@@ -93,7 +99,7 @@ export const addDrugToList = (
 //       });
 //   });
 // };
-export const setAvatar = (id: string, avatar: any) => {
+export const setAvatar = (id: string, avatar: any): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
     const avatarArray: any = Array.from(avatar);
 
@@ -109,6 +115,9 @@ export const setAvatar = (id: string, avatar: any) => {
         resolve(resp);
       })
       .catch((err) => {
+        if (err.response.status === 403) {
+          setUserLoggedOut();
+        }
         reject(err);
       });
   });
@@ -125,6 +134,9 @@ export const editUserNames = (
         resolve(resp);
       })
       .catch((err) => {
+        if (err.response.status === 403) {
+          setUserLoggedOut();
+        }
         reject(err);
       });
   });
@@ -141,12 +153,17 @@ export const editUserEmail = (
         resolve(resp);
       })
       .catch((err) => {
+        if (err.response.status === 403) {
+          setUserLoggedOut();
+        }
         reject(err);
       });
   });
 };
 
-export const verifyUser = (confirmationCode: string | undefined) => {
+export const verifyUser = (
+  confirmationCode: string | undefined
+): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
     axios
       .patch(`user/confirm/${confirmationCode}`)

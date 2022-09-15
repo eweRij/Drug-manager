@@ -1,13 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getUserId } from "../../../utils/auth";
+import { getLogged } from "../../../utils/auth";
 import { getUser } from "../../../utils/api";
-import { UserData } from "../../../types/user";
+import { AppState } from "../../../types/state";
+import { RootState } from "../../store";
 
-interface AppState {
-  isLogged: string;
-  userData: UserData;
-}
 export const fetchUser = createAsyncThunk(
   "user/setUserData",
   async (id: string) =>
@@ -17,7 +14,7 @@ export const fetchUser = createAsyncThunk(
 );
 
 const initialState: AppState = {
-  isLogged: getUserId(), //do przerobki
+  isLogged: getLogged(), //do przerobki
   userData: { _id: "", first_name: "", last_name: "", email: "", drugs: [] },
 };
 
@@ -26,7 +23,7 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setLogged: (state: AppState) => {
-      return { ...state, isLogged: getUserId() };
+      return { ...state, isLogged: getLogged() };
     },
   },
   extraReducers: {
@@ -48,7 +45,7 @@ export const userSlice = createSlice({
 
 export const { setLogged } = userSlice.actions;
 
-// export const selectUserLogged = (state: RootState) => state.user.isLogged;
-// export const selectUserData = (state: RootState) => state.user.userData;
+export const selectUserLogged = (state: RootState) => state.user.isLogged;
+export const selectUserData = (state: RootState) => state.user.userData;
 
 export default userSlice.reducer;

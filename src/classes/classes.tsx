@@ -38,9 +38,7 @@ export const useStyles = makeStyles({
     alignItems: "center",
   },
   listItem: {
-    // backgroundColor: theme.palette.grey[200],
     marginBottom: "1rem",
-    // boxShadow: theme.shadows[5],
     borderRadius: "2px",
   },
   editButton: {
