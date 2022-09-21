@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getLogged } from "../../../utils/auth";
+import { getLogged, getUserId } from "../../../utils/auth";
 import { getUser } from "../../../utils/api";
 import { AppState } from "../../../types/state";
 import { RootState } from "../../store";
@@ -15,6 +15,7 @@ export const fetchUser = createAsyncThunk(
 
 const initialState: AppState = {
   isLogged: getLogged(), //do przerobki
+  id: getUserId(),
   userData: { _id: "", first_name: "", last_name: "", email: "", drugs: [] },
 };
 
@@ -24,6 +25,9 @@ export const userSlice = createSlice({
   reducers: {
     setLogged: (state: AppState) => {
       return { ...state, isLogged: getLogged() };
+    },
+    setId: (state: AppState) => {
+      return { ...state, id: getUserId() };
     },
   },
   extraReducers: {
@@ -46,6 +50,7 @@ export const userSlice = createSlice({
 export const { setLogged } = userSlice.actions;
 
 export const selectUserLogged = (state: RootState) => state.user.isLogged;
+export const selectUserId = (state: RootState) => state.user.id;
 export const selectUserData = (state: RootState) => state.user.userData;
 
 export default userSlice.reducer;

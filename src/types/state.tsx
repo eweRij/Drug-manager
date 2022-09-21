@@ -1,6 +1,7 @@
 import { UserData } from "./user";
 
 export interface AppState {
-  isLogged: boolean;
+  isLogged: boolean | null;
+  id: string | null;
   userData: UserData;
 }

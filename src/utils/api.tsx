@@ -1,13 +1,16 @@
 import { AxiosResponse } from "axios";
 import axios from "./axios";
-import { setLoggedIn, setUserLoggedOut } from "./auth";
+import { setLoggedIn, setUserId, setUserLoggedOutByVerification } from "./auth";
 import { UserDataSignUp, UserDataSignIn } from "../types/user";
 import { Drug } from "../types/drug";
+import { error_toast, success_toast } from "./toast";
 
 export const userRegister = async (user: UserDataSignUp): Promise<void> => {
   await axios
     .post(`user/register`, user)
-    .then((data) => console.log(data))
+    .then(() => {
+      success_toast("Bravo! Successfully signed up.Check your mail now", true);
+    })
     .catch((err) => console.log(err));
 };
 
@@ -17,7 +20,9 @@ export const userLogin = (user: UserDataSignIn): Promise<AxiosResponse> => {
       .post(`user/login`, user)
       .then((resp) => {
         setLoggedIn();
+        setUserId(resp.data._id);
         resolve(resp);
+        success_toast("Bravo! Successfully logged in", true);
       })
       .catch((err) => {
         reject(err);
@@ -30,12 +35,11 @@ export const getUser = (id: string): Promise<AxiosResponse> => {
     axios
       .get(`user/getUser/${id}}`)
       .then((resp) => {
-        console.log("pobieram usera");
         resolve(resp);
       })
       .catch((err) => {
         if (err.response.status === 403) {
-          setUserLoggedOut();
+          setUserLoggedOutByVerification();
         }
         reject(err);
       });
@@ -51,10 +55,11 @@ export const addDrugToList = (
       .post(`drugs/addDrug/${id}`, { drug })
       .then((resp) => {
         resolve(resp);
+        success_toast("Great! New drug was added to the list.", true);
       })
       .catch((err) => {
         if (err.response.status === 403) {
-          setUserLoggedOut();
+          setUserLoggedOutByVerification();
         }
         reject(err);
       });
@@ -116,7 +121,9 @@ export const setAvatar = (id: string, avatar: any): Promise<AxiosResponse> => {
       })
       .catch((err) => {
         if (err.response.status === 403) {
-          setUserLoggedOut();
+          setUserLoggedOutByVerification();
+        } else if (err.response.status === 500) {
+          error_toast("File size cannot be larger than 2MB!", true);
         }
         reject(err);
       });
@@ -135,7 +142,7 @@ export const editUserNames = (
       })
       .catch((err) => {
         if (err.response.status === 403) {
-          setUserLoggedOut();
+          setUserLoggedOutByVerification();
         }
         reject(err);
       });
@@ -154,7 +161,7 @@ export const editUserEmail = (
       })
       .catch((err) => {
         if (err.response.status === 403) {
-          setUserLoggedOut();
+          setUserLoggedOutByVerification();
         }
         reject(err);
       });

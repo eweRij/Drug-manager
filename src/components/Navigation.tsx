@@ -14,30 +14,9 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
-import { success_toast } from "../utils/toast";
-import { setLogged } from "../store/features/user/userSlice";
+import { handleLogOut, pages, settings } from "../utils/navigation";
+import { useStyles } from "../classes/classes";
 
-import { makeStyles } from "@mui/styles";
-import { setLoggedOut } from "../utils/auth";
-
-const pages = [
-  { name: "Profile", link: "/profile" },
-  { name: "Drug Manager", link: "/drugmanager" },
-  { name: "Home", link: "/home" },
-];
-const settings = [
-  { name: "Profile", link: "/profile" },
-  { name: "Logout", link: "/" },
-];
-const useStyles = makeStyles({
-  toolbar: { paddingLeft: "24px", paddingRight: "24px" },
-  logo: {
-    marginRight: "24px !important",
-  },
-  menuItem: {
-    marginRight: "24px !important",
-  },
-});
 const Navigation: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -58,13 +37,6 @@ const Navigation: React.FC = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
-  };
-
-  const handleLogOut = (e: React.SyntheticEvent) => {
-    setLoggedOut();
-    dispatch(setLogged());
-    success_toast("You were successfully logged out. See you again!", true);
-    navigate("/");
   };
 
   return (
@@ -170,7 +142,12 @@ const Navigation: React.FC = () => {
                   className={classes.menuItem}
                 >
                   {setting.name === "Logout" ? (
-                    <Typography onClick={handleLogOut} textAlign="center">
+                    <Typography
+                      onClick={() => {
+                        handleLogOut(dispatch, navigate);
+                      }}
+                      textAlign="center"
+                    >
                       {setting.name}
                     </Typography>
                   ) : (

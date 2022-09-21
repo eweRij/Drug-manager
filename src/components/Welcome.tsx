@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   Card,
@@ -15,7 +15,9 @@ import { useMatch } from "react-router-dom";
 
 const Welcome: React.FC = () => {
   const props = useMatch("/confirm/:confirmationCode");
-  props && verifyUser(props?.params.confirmationCode);
+  useEffect(() => {
+    verifyUser(props?.params.confirmationCode);
+  });
   return (
     <Container maxWidth="sm" sx={{ marginTop: "40vh" }}>
       <Card sx={{ minWidth: 275 }}>

@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import React from "react";
 
 import {
   Card,
@@ -15,24 +15,13 @@ import { useStyles } from "../classes/classes";
 import { UserData } from "../types/user";
 import { Drug } from "../types/drug";
 import { useAppSelector } from "../utils/hooks";
+import { givePosology } from "../utils/posology";
 
 const Home: React.FC = () => {
   const user: UserData = useAppSelector((state) => state.user.userData);
-  const drugs: Drug[] | undefined = user && user.drugs;
+  const drugs: Drug[] | undefined = user?.drugs;
   const classes = useStyles();
-
-  const givePosology = (value: number | undefined): string => {
-    let result;
-    if (value === 1) {
-      result = "in the morning.";
-    } else if (value === 2) {
-      result = "at noon.";
-    } else {
-      result = "in the evening";
-    }
-    return result;
-  };
-
+  //dodac useefecty zeby pobieraly nowego users do profile tez
   return (
     <Container sx={{ marginTop: "15vh" }}>
       <Card className={classes.container}>

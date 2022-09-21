@@ -1,16 +1,14 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { PropsWithChildren, ReactElement } from "react";
 import { Navigate } from "react-router-dom";
-import { setLogged } from "../store/features/user/userSlice";
 
 type ProtectedRouteProps = {
-  user: string | null;
+  isLogged: boolean | null;
+  children: ReactElement;
 };
-const ProtectedRoute: React.FC<any> = ({ isLogged, children }) => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setLogged());
-  }, [isLogged]);
+const ProtectedRoute: React.FC<PropsWithChildren<ProtectedRouteProps>> = ({
+  isLogged,
+  children,
+}) => {
   if (!isLogged) {
     return <Navigate to="/" replace />;
   }

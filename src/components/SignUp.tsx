@@ -4,7 +4,6 @@ import { Container, TextField } from "@mui/material";
 import { validate } from "../utils/signUp_validation";
 import { useFormik } from "formik";
 import { userRegister } from "../utils/api";
-import { success_toast } from "../utils/toast";
 
 const SignUp: React.FC = () => {
   const formik = useFormik({
@@ -25,9 +24,7 @@ const SignUp: React.FC = () => {
   const handleSignUp = (e: SyntheticEvent) => {
     e.preventDefault();
     formik.handleSubmit();
-    userRegister(formik.values).then(() => {
-      success_toast("Bravo! Successfully signed up.Check your mail now", true);
-    });
+    userRegister(formik.values);
   };
   return (
     <Container maxWidth="sm" sx={{ marginTop: "3vh" }}>

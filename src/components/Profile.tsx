@@ -18,28 +18,25 @@ import { Button } from "@mui/material";
 import EditForm from "./EditForm";
 import { fetchUser, selectUserData } from "../store/features/user/userSlice";
 import { useAppSelector } from "../utils/hooks";
-import { error_toast, warning_toast } from "../utils/toast";
 import { editUserEmail, editUserNames, setAvatar } from "../utils/api";
-import { useNavigate } from "react-router-dom";
 import { useStyles } from "../classes/classes";
 import { useFormik } from "formik";
 import { validate } from "../utils/edit_validation";
 
 const Profile: React.FC = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const classes = useStyles();
   const user = useAppSelector(selectUserData);
   const [show, setShow] = useState<boolean>(false);
   const [elementToEdit, setElementToEdit] = useState<string>("");
-  console.log(user);
-  const USER_DATA = user && [
+
+  const USER_DATA = [
     {
-      name: user.first_name + " " + user.last_name,
+      name: user?.first_name + " " + user?.last_name,
       icon: <BadgeTwoToneIcon />,
     },
     {
-      name: user.email,
+      name: user?.email,
       icon: <AlternateEmailTwoToneIcon />,
     },
   ];
@@ -71,15 +68,9 @@ const Profile: React.FC = () => {
   });
   const handleSetAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
-    setAvatar(user._id, files)
-      .then(() => {
-        dispatch(fetchUser(user._id));
-      })
-      .catch((err) => {
-        if (err.response.status === 500) {
-          error_toast("File size cannot be larger than 2MB!", true);
-        }
-      });
+    setAvatar(user._id, files).then(() => {
+      dispatch(fetchUser(user._id));
+    });
   };
   const handleEditUserNames = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -88,32 +79,18 @@ const Profile: React.FC = () => {
       user._id,
       formikNames.values.first_name,
       formikNames.values.last_name
-    )
-      .then(() => {
-        dispatch(fetchUser(user._id));
-        setShow(false);
-      })
-      .catch((err) => {
-        if (err.response.status === 403) {
-          warning_toast("Session has finished. You need to log in!", true);
-          navigate("/");
-        }
-      });
+    ).then(() => {
+      dispatch(fetchUser(user._id));
+      setShow(false);
+    });
   };
   const handleEditUserEmail = (e: SyntheticEvent) => {
     e.preventDefault();
     formikEmail.handleSubmit();
-    editUserEmail(user._id, formikEmail.values.email)
-      .then(() => {
-        dispatch(fetchUser(user._id));
-        setShow(false);
-      })
-      .catch((err) => {
-        if (err.response.status === 403) {
-          warning_toast("Session has finished. You need to log in!", true);
-          navigate("/");
-        }
-      });
+    editUserEmail(user._id, formikEmail.values.email).then(() => {
+      dispatch(fetchUser(user._id));
+      setShow(false);
+    });
   };
   return (
     <Container sx={{ marginTop: "10vh" }}>

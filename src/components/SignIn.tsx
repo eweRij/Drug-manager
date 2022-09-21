@@ -7,12 +7,12 @@ import { useFormik } from "formik";
 import Auth from "./Auth";
 import { validate } from "../utils/signIn_validation";
 import { userLogin } from "../utils/api";
-import { success_toast } from "../utils/toast";
-import { setLogged } from "../store/features/user/userSlice";
+import { fetchUser, setLogged } from "../store/features/user/userSlice";
 
 const SignIn: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       login: "",
@@ -27,9 +27,10 @@ const SignIn: React.FC = () => {
   const handleSignIn = (e: SyntheticEvent) => {
     e.preventDefault();
     formik.handleSubmit();
-    userLogin(formik.values).then(() => {
+    userLogin(formik.values).then((resp) => {
+      console.log(resp.data);
       dispatch(setLogged());
-      success_toast("Bravo! Successfully logged in", true);
+      dispatch(fetchUser(resp.data._id));
       navigate("/home");
     });
   };

@@ -69,4 +69,11 @@ export const useStyles = makeStyles({
     paddingLeft: "2rem !important",
     paddingRight: "2rem !important",
   },
+  toolbar: { paddingLeft: "24px", paddingRight: "24px" },
+  logo: {
+    marginRight: "24px !important",
+  },
+  menuItem: {
+    marginRight: "24px !important",
+  },
 });

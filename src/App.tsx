@@ -3,7 +3,12 @@ import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 
 import { useAppSelector } from "./utils/hooks";
-import { selectUserLogged, setLogged } from "./store/features/user/userSlice";
+import {
+  fetchUser,
+  selectUserId,
+  selectUserLogged,
+  setLogged,
+} from "./store/features/user/userSlice";
 import Navigation from "./components/Navigation";
 import SignIn from "./components/SignIn";
 import Home from "./components/Home";
@@ -15,13 +20,13 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.scss";
 
 const App: React.FC = () => {
-  const isLogged: boolean = useAppSelector(selectUserLogged);
+  const isLogged: boolean | null = useAppSelector(selectUserLogged);
+  const userId: string | null = useAppSelector(selectUserId);
   const dispatch = useDispatch();
-  const user = useAppSelector((state) => state.user.userData);
-  console.log(user);
+
   useEffect(() => {
     dispatch(setLogged());
-    //trzeba pobrac usera przy signin!!wrzucic go w LS i potem profile ited
+    userId && dispatch(fetchUser(userId));
   });
 
   return (
@@ -30,6 +35,7 @@ const App: React.FC = () => {
       <Routes>
         <Route index element={<SignIn />} />
         <Route path="/" element={<SignIn />} />
+        <Route path="register" element={<SignUp />} />
         <Route
           path="home"
           element={
@@ -46,14 +52,7 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="register"
-          element={
-            <ProtectedRoute isLogged={isLogged}>
-              <SignUp />
-            </ProtectedRoute>
-          }
-        />
+
         <Route
           path="drugManager"
           element={
