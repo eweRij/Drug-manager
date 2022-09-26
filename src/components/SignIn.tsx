@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import Auth from "./Auth";
 import { validate } from "../utils/signIn_validation";
 import { userLogin } from "../utils/api";
-import { fetchUser, setLogged } from "../store/features/user/userSlice";
+import { fetchUser, setId, setLogged } from "../store/features/user/userSlice";
 
 const SignIn: React.FC = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,8 @@ const SignIn: React.FC = () => {
     e.preventDefault();
     formik.handleSubmit();
     userLogin(formik.values).then((resp) => {
-      console.log(resp.data);
+      console.log(resp.data._id);
+      dispatch(setId());
       dispatch(setLogged());
       dispatch(fetchUser(resp.data._id));
       navigate("/home");

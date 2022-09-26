@@ -27,11 +27,13 @@ export const userSlice = createSlice({
       return { ...state, isLogged: getLogged() };
     },
     setId: (state: AppState) => {
+      console.log(getUserId());
       return { ...state, id: getUserId() };
     },
   },
   extraReducers: {
     [fetchUser.fulfilled.type]: (state, action) => {
+      console.log(action.payload);
       return {
         ...state,
         userData: {
@@ -47,7 +49,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setLogged } = userSlice.actions;
+export const { setLogged, setId } = userSlice.actions;
 
 export const selectUserLogged = (state: RootState) => state.user.isLogged;
 export const selectUserId = (state: RootState) => state.user.id;

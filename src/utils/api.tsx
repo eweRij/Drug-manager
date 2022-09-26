@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "./axios";
 import { setLoggedIn, setUserId, setUserLoggedOutByVerification } from "./auth";
 import { UserDataSignUp, UserDataSignIn } from "../types/user";
@@ -20,6 +20,7 @@ export const userLogin = (user: UserDataSignIn): Promise<AxiosResponse> => {
       .post(`user/login`, user)
       .then((resp) => {
         setLoggedIn();
+        console.log(resp.data._id);
         setUserId(resp.data._id);
         resolve(resp);
         success_toast("Bravo! Successfully logged in", true);
@@ -30,11 +31,13 @@ export const userLogin = (user: UserDataSignIn): Promise<AxiosResponse> => {
   });
 };
 
-export const getUser = (id: string): Promise<AxiosResponse> => {
+export const getUser = (id: any): Promise<AxiosResponse> => {
   return new Promise((resolve, reject) => {
     axios
-      .get(`user/getUser/${id}}`)
+      .get(`user/getUser/${id}`)
       .then((resp) => {
+        console.log(id);
+        console.log(resp);
         resolve(resp);
       })
       .catch((err) => {

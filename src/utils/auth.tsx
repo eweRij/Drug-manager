@@ -5,8 +5,12 @@ export const setLoggedOut = () =>
 
 export const setLoggedIn = () =>
   localStorage.setItem("isLogged", JSON.stringify(true)); //do obsługi isLogged ?
-export const setUserId = (id: string): void =>
-  localStorage.setItem("id", JSON.stringify(id)); //do obsługi isLogged ?
+export const setUserId = (id: string): void => {
+  localStorage.setItem("id", JSON.stringify(id));
+  console.log(id);
+};
+
+//do obsługi isLogged ?
 export const getUserId = (): string =>
   JSON.parse(localStorage.getItem("id") || "null");
 export const removeUserId = (): void => localStorage.removeItem("id"); //do obsługi isLogged ?
