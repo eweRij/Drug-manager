@@ -16,11 +16,14 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { handleLogOut, pages, settings } from "../utils/navigation";
 import { useStyles } from "../classes/classes";
+import { useAppSelector } from "../utils/hooks";
+import { selectUserData } from "../store/features/user/userSlice";
 
 const Navigation: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const classes = useStyles();
+  const user = useAppSelector(selectUserData);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -116,7 +119,7 @@ const Navigation: React.FC = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="user avatar" src="" />
+                <Avatar alt="user avatar" src={user?.avatar} />
               </IconButton>
             </Tooltip>
             <Menu

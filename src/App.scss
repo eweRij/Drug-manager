@@ -1,9 +1,13 @@
-* {
+body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-}
-html {
-  min-height: 100vh;
-  background: transparent url("./assets/Layout3.jpg") no-repeat center/cover;
+  overflow: hidden;
+  background: transparent url("./assets/Layout3.jpg") no-repeat center;
+  background-size: cover;
+  #root {
+    height: 100vh;
+    overflow: auto;
+    box-sizing: border-box;
+  }
 }

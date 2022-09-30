@@ -1,17 +1,17 @@
-import { AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import axios from "./axios";
-import { setLoggedIn, setUserId, setUserLoggedOutByVerification } from "./auth";
+import { setLoggedIn, setUserId } from "./auth";
 import { UserDataSignUp, UserDataSignIn } from "../types/user";
 import { Drug } from "../types/drug";
-import { error_toast, success_toast } from "./toast";
+import { errors_toasts, success_toast } from "./toast";
 
 export const userRegister = async (user: UserDataSignUp): Promise<void> => {
   await axios
     .post(`user/register`, user)
     .then(() => {
-      success_toast("Bravo! Successfully signed up.Check your mail now", true);
+      success_toast("Bravo! Successfully signed up. Check your mail now", true);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => errors_toasts(err));
 };
 
 export const userLogin = (user: UserDataSignIn): Promise<AxiosResponse> => {
@@ -19,13 +19,14 @@ export const userLogin = (user: UserDataSignIn): Promise<AxiosResponse> => {
     axios
       .post(`user/login`, user)
       .then((resp) => {
+        console.log(resp.request);
         setLoggedIn();
-        console.log(resp.data._id);
         setUserId(resp.data._id);
         resolve(resp);
         success_toast("Bravo! Successfully logged in", true);
       })
       .catch((err) => {
+        errors_toasts(err);
         reject(err);
       });
   });
@@ -36,14 +37,10 @@ export const getUser = (id: any): Promise<AxiosResponse> => {
     axios
       .get(`user/getUser/${id}`)
       .then((resp) => {
-        console.log(id);
-        console.log(resp);
         resolve(resp);
       })
       .catch((err) => {
-        if (err.response.status === 403) {
-          setUserLoggedOutByVerification();
-        }
+        errors_toasts(err);
         reject(err);
       });
   });
@@ -61,9 +58,7 @@ export const addDrugToList = (
         success_toast("Great! New drug was added to the list.", true);
       })
       .catch((err) => {
-        if (err.response.status === 403) {
-          setUserLoggedOutByVerification();
-        }
+        errors_toasts(err);
         reject(err);
       });
   });
@@ -123,11 +118,7 @@ export const setAvatar = (id: string, avatar: any): Promise<AxiosResponse> => {
         resolve(resp);
       })
       .catch((err) => {
-        if (err.response.status === 403) {
-          setUserLoggedOutByVerification();
-        } else if (err.response.status === 500) {
-          error_toast("File size cannot be larger than 2MB!", true);
-        }
+        errors_toasts(err);
         reject(err);
       });
   });
@@ -144,9 +135,7 @@ export const editUserNames = (
         resolve(resp);
       })
       .catch((err) => {
-        if (err.response.status === 403) {
-          setUserLoggedOutByVerification();
-        }
+        errors_toasts(err);
         reject(err);
       });
   });
@@ -163,9 +152,7 @@ export const editUserEmail = (
         resolve(resp);
       })
       .catch((err) => {
-        if (err.response.status === 403) {
-          setUserLoggedOutByVerification();
-        }
+        errors_toasts(err);
         reject(err);
       });
   });
@@ -181,6 +168,7 @@ export const verifyUser = (
         resolve(resp);
       })
       .catch((err) => {
+        errors_toasts(err);
         reject(err);
       });
   });

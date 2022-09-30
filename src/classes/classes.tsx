@@ -2,7 +2,9 @@ import { makeStyles } from "@mui/styles";
 export const useStyles = makeStyles({
   container: {
     minWidth: "275px",
+    height: "500px",
     marginBottom: "4rem",
+    overflowY: "scroll",
   },
   form: {
     display: "flex",

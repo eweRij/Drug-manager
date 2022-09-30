@@ -5,11 +5,9 @@ import { Route, Routes } from "react-router-dom";
 import { useAppSelector } from "./utils/hooks";
 import {
   fetchUser,
-  selectUserData,
   selectUserId,
   selectUserLogged,
   setLogged,
-  setId,
 } from "./store/features/user/userSlice";
 import Navigation from "./components/Navigation";
 import SignIn from "./components/SignIn";
@@ -24,17 +22,12 @@ import "./App.scss";
 const App: React.FC = () => {
   const isLogged: boolean | null = useAppSelector(selectUserLogged);
   const userId: string | null = useAppSelector(selectUserId);
-  const user = useAppSelector(selectUserData);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setLogged());
-    console.log(userId);
     userId && dispatch(fetchUser(userId));
   }, []);
-  console.log(userId);
-  console.log(localStorage.getItem("id"));
-  console.log(user);
   return (
     <>
       {isLogged && <Navigation />}

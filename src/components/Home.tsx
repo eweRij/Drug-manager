@@ -16,24 +16,15 @@ import { UserData } from "../types/user";
 import { Drug } from "../types/drug";
 import { useAppSelector } from "../utils/hooks";
 import { givePosology } from "../utils/posology";
-import { useDispatch } from "react-redux";
-import { fetchUser, selectUserId } from "../store/features/user/userSlice";
 
 const Home: React.FC = () => {
   const user: UserData = useAppSelector((state) => state.user.userData);
-  const userId: any = useAppSelector(selectUserId);
   const drugs: Drug[] | undefined = user?.drugs;
   const classes = useStyles();
-  const dispatch = useDispatch();
-  console.log(user);
-  // console.log(userId);
-  // useEffect(() => {
-  //   dispatch(fetchUser(userId));
-  // }, []);
-  //dodac useefecty zeby pobieraly nowego users do profile tez
+
   return (
-    <Container sx={{ marginTop: "15vh" }}>
-      <Card className={classes.container}>
+    <Container sx={{ marginTop: "10vh" }}>
+      <Card sx={{ overflowY: "scroll" }} className={classes.container}>
         <CardHeader
           title={"Welcome!"}
           sx={{ textAlign: "center" }}

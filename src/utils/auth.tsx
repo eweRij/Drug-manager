@@ -1,4 +1,4 @@
-import { success_toast, warning_toast } from "./toast";
+import { success_toast } from "./toast";
 
 export const setLoggedOut = () =>
   localStorage.setItem("isLogged", JSON.stringify(false)); //do obsługi isLogged ?
@@ -7,7 +7,6 @@ export const setLoggedIn = () =>
   localStorage.setItem("isLogged", JSON.stringify(true)); //do obsługi isLogged ?
 export const setUserId = (id: string): void => {
   localStorage.setItem("id", JSON.stringify(id));
-  console.log(id);
 };
 
 //do obsługi isLogged ?
@@ -21,7 +20,6 @@ export const getLogged = (): any =>
 export const setUserLoggedOutByVerification = (): void => {
   setLoggedOut();
   removeUserId();
-  warning_toast("Session has finished. You need to log in!", true);
   setTimeout(() => {
     window.location.reload();
   }, 3000);

@@ -62,10 +62,7 @@ const DrugManager: React.FC = () => {
 
   return (
     <Container sx={{ marginTop: "10vh" }}>
-      <Card
-        sx={{ minWidth: 275, overflow: "scroll" }}
-        className={classes.container}
-      >
+      <Card sx={{ overflowY: "scroll" }} className={classes.container}>
         <CardHeader
           title={"Add you medication here"}
           className={classes.header}

@@ -94,7 +94,7 @@ const Profile: React.FC = () => {
   };
   return (
     <Container sx={{ marginTop: "10vh" }}>
-      <Card sx={{ minWidth: 275 }} className={classes.container}>
+      <Card sx={{ overflowY: "scroll" }} className={classes.container}>
         <CardHeader
           className={classes.header}
           title={"Your profile"}
