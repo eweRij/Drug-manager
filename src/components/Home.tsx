@@ -16,6 +16,7 @@ import { UserData } from "../types/user";
 import { Drug } from "../types/drug";
 import { useAppSelector } from "../utils/hooks";
 import { givePosology } from "../utils/posology";
+import { selectImage } from "../utils/home";
 
 const Home: React.FC = () => {
   const user: UserData = useAppSelector((state) => state.user.userData);
@@ -37,13 +38,14 @@ const Home: React.FC = () => {
           <ul className={classes.drugList}>
             {drugs &&
               drugs.map((el, id) => {
+                const img = selectImage(el.drug_group);
                 return (
                   <li style={{ listStyle: "none" }} key={id}>
                     <Card className={classes.drugCard}>
                       <CardMedia
                         component="img"
-                        height="140"
-                        // image="/static/images/cards/contemplative-reptile.jpg"
+                        height="194"
+                        image={require(`../assets/svg/${img}.svg`)}
                         alt="drug category"
                       />
                       <div

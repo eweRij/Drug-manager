@@ -12,7 +12,12 @@ import {
 } from "@mui/material";
 
 import { useStyles } from "../classes/classes";
-import { validate } from "../utils/drugManager_validation";
+import {
+  daytime_options,
+  drug_group_options,
+  posology_options,
+  validate,
+} from "../utils/drugManager";
 import { addDrugToList } from "../utils/api";
 import { useAppSelector } from "../utils/hooks";
 import { selectUserData } from "../store/features/user/userSlice";
@@ -21,31 +26,13 @@ const DrugManager: React.FC = () => {
   const classes = useStyles();
   const user = useAppSelector(selectUserData);
 
-  const daytime_options = [
-    {
-      label: "morning",
-      value: 1,
-    },
-    { label: "noon", value: 2 },
-    { label: "evening", value: 3 },
-  ];
-  const posology_options = [
-    {
-      label: "1",
-      value: 1,
-    },
-    { label: "2", value: 2 },
-    { label: "3", value: 3 },
-    { label: "4", value: 4 },
-    { label: "5", value: 5 },
-    { label: "6", value: 6 },
-  ];
   const formik = useFormik({
     initialValues: {
       drug_name: "",
       when: 1,
       amount: 1,
       frequency: 1,
+      drug_group: 1,
       additionalInfo: "",
     },
     validate,
@@ -143,6 +130,26 @@ const DrugManager: React.FC = () => {
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              id="drug_group"
+              name="drug_group"
+              select
+              label="What drug group it belongs to?"
+              onChange={formik.handleChange}
+              value={formik.values.drug_group}
+              error={
+                formik.touched.drug_group && Boolean(formik.errors.drug_group)
+              }
+              helperText="Please select the group"
+              variant="standard"
+              disabled={formik.values.frequency > 1 ? true : false}
+            >
+              {drug_group_options.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem> //sprobowac z enumem, tylko nazwy beda popieprzone
               ))}
             </TextField>
             <TextField
