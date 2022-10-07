@@ -9,6 +9,13 @@ import {
   Button,
   TextField,
   MenuItem,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  FormGroup,
+  Checkbox,
 } from "@mui/material";
 
 import { useStyles } from "../classes/classes";
@@ -114,24 +121,35 @@ const DrugManager: React.FC = () => {
                 </MenuItem>
               ))}
             </TextField>
-            <TextField
-              id="when"
-              name="when"
-              select
-              label="When to take?"
-              onChange={formik.handleChange}
-              value={formik.values.when}
-              error={formik.touched.when && Boolean(formik.errors.when)}
-              helperText="Please select the daytime"
-              variant="standard"
-              disabled={formik.values.frequency > 1 ? true : false}
-            >
-              {daytime_options.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
+            {formik.values.frequency > 1 ? (
+              <FormGroup row>
+                <FormControlLabel
+                  control={<Checkbox defaultChecked />}
+                  label="Label"
+                />
+                <FormControlLabel control={<Checkbox />} label="Disabled" />
+              </FormGroup>
+            ) : (
+              <TextField
+                id="when"
+                name="when"
+                select
+                label="When to take?"
+                onChange={formik.handleChange}
+                value={formik.values.when}
+                error={formik.touched.when && Boolean(formik.errors.when)}
+                helperText="Please select the daytime"
+                variant="standard"
+                disabled={formik.values.frequency > 1 ? true : false}
+              >
+                {daytime_options.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            )}
+
             <TextField
               id="drug_group"
               name="drug_group"
@@ -144,7 +162,6 @@ const DrugManager: React.FC = () => {
               }
               helperText="Please select the group"
               variant="standard"
-              disabled={formik.values.frequency > 1 ? true : false}
             >
               {drug_group_options.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
