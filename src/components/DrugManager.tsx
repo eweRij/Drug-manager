@@ -36,7 +36,7 @@ const DrugManager: React.FC = () => {
   const formik = useFormik({
     initialValues: {
       drug_name: "",
-      when: 1,
+      when: [],
       amount: 1,
       frequency: 1,
       drug_group: 1,
@@ -122,13 +122,60 @@ const DrugManager: React.FC = () => {
               ))}
             </TextField>
             {formik.values.frequency > 1 ? (
-              <FormGroup row>
-                <FormControlLabel
-                  control={<Checkbox defaultChecked />}
-                  label="Label"
-                />
-                <FormControlLabel control={<Checkbox />} label="Disabled" />
-              </FormGroup>
+              // <FormGroup row>
+              //   {daytime_options.map((option) => (
+              //     <FormControlLabel
+              //       label="When to take?"
+              //       key={option.value}
+              //       control={
+              //         <Checkbox
+              //           value={option.value}
+              //           onChange={formik.handleChange}
+              //         />
+              //       }
+              //       label={option.label}
+              //     />
+              //   ))}
+              // </FormGroup>
+              <FormControl
+                sx={{ m: 3 }}
+                component="fieldset"
+                variant="standard"
+              >
+                <FormLabel component="legend">When to take?</FormLabel>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value={1}
+                        onChange={formik.handleChange}
+                        name="when"
+                      />
+                    }
+                    label="morning"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value={2}
+                        onChange={formik.handleChange}
+                        name="when"
+                      />
+                    }
+                    label="noon"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        value={3}
+                        onChange={formik.handleChange}
+                        name="when"
+                      />
+                    }
+                    label="evening"
+                  />
+                </FormGroup>
+              </FormControl>
             ) : (
               <TextField
                 id="when"

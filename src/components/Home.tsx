@@ -1,5 +1,3 @@
-import React, { useEffect } from "react";
-
 import {
   Card,
   CardContent,
@@ -16,13 +14,28 @@ import { UserData } from "../types/user";
 import { Drug } from "../types/drug";
 import { useAppSelector } from "../utils/hooks";
 import { givePosology } from "../utils/posology";
-import { selectImage } from "../utils/home";
+import {
+  eveningDrugs,
+  morningDrugs,
+  noonDrugs,
+  selectImage,
+} from "../utils/home";
+import DayDrugsCard from "./DayDrugsCard";
 
 const Home: React.FC = () => {
   const user: UserData = useAppSelector((state) => state.user.userData);
   const drugs: Drug[] | undefined = user?.drugs;
+  console.log(drugs);
   const classes = useStyles();
-
+  const sortedDrugs = [
+    { header: "Morning", drugs: morningDrugs(drugs) },
+    { header: "Noon", drugs: noonDrugs(drugs) },
+    { header: "Evening", drugs: eveningDrugs(drugs) },
+  ];
+  // const dayTimes=[{header:'morning',
+  // morningDrugs:drugs?.filter((drug)=>{
+  //   return drug
+  // })}]
   return (
     <Container sx={{ marginTop: "10vh" }}>
       <Card sx={{ overflowY: "scroll" }} className={classes.container}>
@@ -36,53 +49,15 @@ const Home: React.FC = () => {
             Your medication
           </Typography>
           <ul className={classes.drugList}>
-            {drugs &&
-              drugs.map((el, id) => {
-                const img = selectImage(el.drug_group);
-                return (
-                  <li style={{ listStyle: "none" }} key={id}>
-                    <Card className={classes.drugCard}>
-                      <CardMedia
-                        component="img"
-                        height="194"
-                        image={require(`../assets/svg/${img}.svg`)}
-                        alt="drug category"
-                      />
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "space-between",
-                          height: "60%",
-                        }}
-                      >
-                        <CardContent>
-                          <Typography gutterBottom variant="h5" component="div">
-                            {el.drug_name}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {el.frequency === 1 ? (
-                              <>
-                                Posology: {el.amount} tablet/s{" "}
-                                {givePosology(el.when)}
-                              </>
-                            ) : (
-                              <>
-                                Posology : {el.amount} tablet {el.frequency}
-                                <br></br>Additional Information:{" "}
-                                {el.additionalInfo}
-                              </>
-                            )}
-                          </Typography>
-                        </CardContent>
-                        <CardActions sx={{ alignSelf: "flex-end" }}>
-                          <Button size="small">Edit</Button>
-                        </CardActions>
-                      </div>
-                    </Card>
-                  </li>
-                );
-              })}
+            {sortedDrugs.map((el, id) => {
+              return (
+                <DayDrugsCard
+                  key={id}
+                  header={el.header}
+                  drugsToTake={el.drugs}
+                ></DayDrugsCard>
+              );
+            })}
           </ul>
         </CardContent>
       </Card>

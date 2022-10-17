@@ -1,4 +1,4 @@
-import { DrugGroup } from "../types/drug";
+import { Drug, DrugGroup } from "../types/drug";
 
 export const selectImage = (select: number): string => {
   switch (select) {
@@ -65,4 +65,20 @@ export const selectImage = (select: number): string => {
       return "";
     }
   }
+};
+export const morningDrugs = (drugs: any): Array<Drug> => {
+  return drugs.filter((drug: any) => {
+    return drug.when.includes(1);
+  });
+};
+
+export const noonDrugs = (drugs: any): Array<Drug> => {
+  return drugs.filter((drug: any) => {
+    return drug.when.includes(2);
+  });
+};
+export const eveningDrugs = (drugs: any): Array<Drug> => {
+  return drugs.filter((drug: any) => {
+    return drug.when.includes(3);
+  });
 };

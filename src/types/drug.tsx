@@ -1,6 +1,6 @@
 export interface Drug {
   drug_name: string;
-  when?: number;
+  when?: Array<number> | [];
   amount: number;
   frequency: number;
   drug_group: number;
