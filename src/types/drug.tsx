@@ -7,6 +7,11 @@ export interface Drug {
   additionalInfo?: string;
 }
 
+export interface SortedDrugs {
+  header: string;
+  drugs: Drug[];
+}
+
 export enum DrugGroup {
   Other = 1,
   Allergy,

@@ -3,14 +3,11 @@ import React from "react";
 import { Drug } from "../types/drug";
 import { selectImage } from "../utils/home";
 interface DayDrugsCardProps {
-  header: string;
   drugsToTake?: Drug[];
 }
-const DayDrugsCard: React.FC<DayDrugsCardProps> = ({ header, drugsToTake }) => {
-  console.log(header);
+const DayDrugsCard: React.FC<DayDrugsCardProps> = ({ drugsToTake }) => {
   return (
     <Card>
-      <CardHeader>{header}</CardHeader>
       <CardContent>
         {drugsToTake?.map((drug, id) => {
           const drugGroup = selectImage(drug.drug_group);

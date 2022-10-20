@@ -32,7 +32,7 @@ import { selectUserData } from "../store/features/user/userSlice";
 const DrugManager: React.FC = () => {
   const classes = useStyles();
   const user = useAppSelector(selectUserData);
-
+  console.log(user);
   const formik = useFormik({
     initialValues: {
       drug_name: "",

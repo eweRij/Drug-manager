@@ -11,7 +11,7 @@ import {
 
 import { useStyles } from "../classes/classes";
 import { UserData } from "../types/user";
-import { Drug } from "../types/drug";
+import { Drug, SortedDrugs } from "../types/drug";
 import { useAppSelector } from "../utils/hooks";
 import { givePosology } from "../utils/posology";
 import {
@@ -21,21 +21,19 @@ import {
   selectImage,
 } from "../utils/home";
 import DayDrugsCard from "./DayDrugsCard";
+import DayTimeTabs from "./DayTimeTabs";
 
 const Home: React.FC = () => {
   const user: UserData = useAppSelector((state) => state.user.userData);
   const drugs: Drug[] | undefined = user?.drugs;
+  console.log(user);
   console.log(drugs);
   const classes = useStyles();
   const sortedDrugs = [
-    { header: "Morning", drugs: morningDrugs(drugs) },
-    { header: "Noon", drugs: noonDrugs(drugs) },
-    { header: "Evening", drugs: eveningDrugs(drugs) },
+    { value: "1", header: "Morning", drugs: drugs ? morningDrugs(drugs) : [] },
+    { value: "2", header: "Noon", drugs: drugs ? noonDrugs(drugs) : [] },
+    { value: "3", header: "Evening", drugs: drugs ? eveningDrugs(drugs) : [] },
   ];
-  // const dayTimes=[{header:'morning',
-  // morningDrugs:drugs?.filter((drug)=>{
-  //   return drug
-  // })}]
   return (
     <Container sx={{ marginTop: "10vh" }}>
       <Card sx={{ overflowY: "scroll" }} className={classes.container}>
@@ -48,7 +46,8 @@ const Home: React.FC = () => {
           <Typography gutterBottom variant="h6" component="div">
             Your medication
           </Typography>
-          <ul className={classes.drugList}>
+          <DayTimeTabs drugs={drugs}></DayTimeTabs>
+          {/* <ul className={classes.drugList}>
             {sortedDrugs.map((el, id) => {
               return (
                 <DayDrugsCard
@@ -58,7 +57,7 @@ const Home: React.FC = () => {
                 ></DayDrugsCard>
               );
             })}
-          </ul>
+          </ul> */}
         </CardContent>
       </Card>
     </Container>
